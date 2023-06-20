@@ -63,33 +63,22 @@ const Portfolio = () => {
     setIsViewerOpen(false);
   };
 
-  const widthWindow = useRef([window.innerWidth]);
-  // widthWindow.current[0] < 700 ? setImageHeight('20vw') : setImageHeight(200);
-
-  const calcImageHeight = () => {
-    console.log('largeur de la fenetre');
-    console.log(widthWindow.current[0]);
-    return widthWindow.current[0] < 700 ? '20vw' : 200;
-    // return '20vw';
-  }
-
   return (
     <>
-      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition1} onMouseEnter={mouseDisappearHandler} onMouseLeave={mouseLeaveHandler} className='section'>
+      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition1} className='section'>
 
         {/* </div> */}
         {/* <div style={{ backgroundColor: 'grey', border: 'solid'}}> */}
-        <h1 className='h1 pt-24 text-6xl container mx-auto pl-56'>Mes créations</h1>
-        <div style={{ backgroundColor: 'white' }} className='mx-auto h-[75vh] w-[90vw] pt-6'>
+        <h1 onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} className='h1 pt-28 text-6xl container mx-auto pl-[10vw] xs:pl-[17vw] sm:pl-[20vw]'>Mes créations</h1>
+        <div style={{ backgroundColor: 'white' }} onMouseEnter={mouseDisappearHandler} onMouseLeave={mouseLeaveHandler} className='mx-auto h-[75vh] w-[90vw] pt-4'>
           {/* <div className='flex flex-col lg:flex-row h-full w-full items-center justify-start gap-x-24 text-center lg:text-left pt-24 lg:pt-36 pb-8'> */}
           <div initial={{ opacity: 0, y: '-80%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '-80%' }} transition={transition1} className='grid grid-cols-12 grid-flow-col gap-y-40 h-[75vh]' >
-            <div className='hidden xl:block h-full xl:col-span-2 bg-slate-200 overflow-y-scroll scrollbar scrollbar-w-2 scrollbar-thumb-gray-900 scrollbar-track-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full' >
-              <motion.div initial={{ opacity: 0, y: '-80%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '-80%' }} transition={transition1} className='h-full col-span-2'>
+            {/* <div className='xl:hidden bg-red-600 hover:w-[250px] hover:relative hover:z-50'>
+            </div> */}
+            <div className='xl:block h-full col-span-2 bg-slate-200 hover:w-[250px] xl:hover:w-auto hover:relative hover:z-50 overflow-y-scroll overflow-x-hidden scrollbar scrollbar-w-2 scrollbar-thumb-gray-900 scrollbar-track-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full' >
+              <motion.div initial={{ opacity: 0, y: '-80%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '-80%' }} transition={transition1} className='h-full col-span-2 text-[#696c6d]'>
                 <GalleryList collection={collections} collectionHandler={changeCollection} />
               </motion.div>
-            </div>
-            <div className='col-span-1 xl:hidden bg-red-600'>
-
             </div>
             {/* rounded-2xl border-8 border-slate-100 */}
             <div className='ml-2 h-full col-span-11 xl:col-span-10 overflow-y-scroll scrollbar scrollbar-w-3 scrollbar-thumb-gray-900 scrollbar-track-slate-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full bg-slate-100'>

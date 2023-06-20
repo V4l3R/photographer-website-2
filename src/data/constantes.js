@@ -1,6 +1,6 @@
 export const DEFAULT_COLLECTION = 'Printemps';
 
-export const GALLERY_IMAGE_HEIGHT = '200px';
+export const GALLERY_IMAGE_HEIGHT = 200;
 export const GALLERY_IMAGE_MARGIN = '2px';
 
 export const FACEBOOK_URL  = 'http://www.facebook.com';
