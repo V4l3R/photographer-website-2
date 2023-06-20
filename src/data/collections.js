@@ -7,23 +7,23 @@ function importAll(r) {
 const COLLECTIONS = [
     {
       name: "Collection 1",
-      path: "../img/portfolio/collections/default/",
-      collection: importAll(require.context('../img/portfolio/collections/default/', false, /\.(png|jpe?g|svg)$/))
+      path: "../img/collections/default/",
+      collection: importAll(require.context('../img/collections/default/', false, /\.(png|jpe?g|svg)$/))
     },
     {
       name: "Printemps",
-      path: "../img/portfolio/collections/printemps/",
-      collection: importAll(require.context('../img/portfolio/collections/printemps/', false, /\.(png|jpe?g|svg)$/))
+      path: "../img/collections/printemps/",
+      collection: importAll(require.context('../img/collections/printemps/', false, /\.(png|jpe?g|svg)$/))
     },
     {
       name: "Vacances d'été en Italie",
-      path: "../img/portfolio/collections/vacances italie/",
-      collection: importAll(require.context('../img/portfolio/collections/vacances italie/', false, /\.(png|jpe?g|svg)$/))
+      path: "../img/collections/vacances italie/",
+      collection: importAll(require.context('../img/collections/vacances italie/', false, /\.(png|jpe?g|svg)$/))
     },
     {
       name: "Petits chats",
-      path: "../img/portfolio/collections/kitties/",
-      collection: importAll(require.context('../img/portfolio/collections/kitties/', false, /\.(png|jpe?g|svg)$/))
+      path: "../img/collections/kitties/",
+      collection: importAll(require.context('../img/collections/kitties/', false, /\.(png|jpe?g|svg)$/))
     },
   ]
 

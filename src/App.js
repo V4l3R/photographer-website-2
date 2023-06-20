@@ -10,10 +10,9 @@ import { CursorContext } from './context/CursorContext';
 
 const App = () => {
   const { cursorVariants, cursorBG } = useContext(CursorContext);
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
+  const { mouseLeaveHandler } = useContext(CursorContext);
   return (
     <div onMouseEnter={mouseLeaveHandler} onMouseLeave={mouseLeaveHandler}>
-     {/* <div> */}
       <Router>
         <Header />
         <AnimRoutes />
@@ -27,6 +26,3 @@ const App = () => {
 };
 
 export default App;
-
-
-// // "framer-motion": "^10.12.16",

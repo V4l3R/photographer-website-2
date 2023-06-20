@@ -29,7 +29,7 @@ const Home = () => {
               Contact
             </Link>
           </motion.div>
-          <div className='flex justify-end max-h-96 max-h-max'>
+          <div className='flex justify-end max-h-max'>
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={transition1} className='relative lg:-right-40 overflow-hidden'>
               <div className='relative -top-16 lg:top-0'>
                 <motion.img onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} whileHover={{ scale: 1.1 }} transition={transition1} src={HomeImg} alt="Photo de photographe" />

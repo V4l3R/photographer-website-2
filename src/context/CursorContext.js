@@ -27,7 +27,6 @@ const CursorProvider = ({ children }) => {
         window.removeEventListener('mousemove', move)
       }
     } else {
-      // setCursorBG('none');
       setCursorBG('disappear');
     }
     });

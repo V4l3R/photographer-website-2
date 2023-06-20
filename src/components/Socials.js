@@ -3,16 +3,14 @@ import React, { useContext } from 'react';
 import { ImFacebook, ImTwitter, ImPinterest, ImInstagram, ImYoutube } from 'react-icons/im';
 import { CursorContext } from '../context/CursorContext';
 
-import { FACEBOOK_URL,TWITTER_URL, INSTAGRAM_URL, PINTEREST_URL, YOUTUBE_URL } from '../data/constantes';
+import { FACEBOOK_URL, TWITTER_URL, INSTAGRAM_URL, PINTEREST_URL, YOUTUBE_URL } from '../data/constantes';
 
 const Socials = () => {
 
   const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
 
   return (
-    // <div onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} className='hidden xl:flex ml-24'>
-    <div onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} className='hidden xl:flex ml-20'>
-      {/* <ul className='flex gap-x-4'> */}
+    <div onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} className='hidden lg:flex ml-12 xl:ml-20'>
       <ul className='flex gap-x-6 pr-[2.7vw]'>
         <li>
           <a href={FACEBOOK_URL} target='_blank'>

@@ -68,15 +68,11 @@ const Contact = () => {
                 <div className='flex flex-col sm:flex-row gap-x-10'>
                   <input type="text" name="nom" placeholder='Votre nom' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' onChange={e => setName(e.target.value)} />
                   <input type="hidden" name="_next" value="http://localhost:3000/contact?success=true"></input>
-                  {/* <input type="text" name="email" placeholder='Votre adresse email' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' /> */}
                   <input type="text" name="email" id="userEmail" placeholder='Votre adresse email' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' onBlur={(e) => validateEmail(e)}></input>
-                  {/* <br /> */}
                 </div>
-                {/* <input type="text" name="message" placeholder='Votre message' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' /> */}
                 <textarea type="text" name="message" placeholder='Votre message' className='outline-none border-b border-b-primary h-[40px] mt-2 bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879] max-h-40' onChange={e => setMessage(e.target.value)} />
                 <input type="hidden" name="_captcha" value="false"></input>
-                {/* <input type="hidden" name="_autoresponse" value="J'ai bien reçu votre message !"></input> */}
-              <MessageSended />
+                <MessageSended />
                 <SubmitButton />
               </form>
             </div>
