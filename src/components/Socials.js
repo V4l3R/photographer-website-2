@@ -32,11 +32,11 @@ const Socials = () => {
             <ImPinterest />
           </a>
         </li>
-        <li>
+        {/* <li>
           <a href={YOUTUBE_URL} target='_blank'>
             <ImYoutube />
           </a>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

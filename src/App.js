@@ -1,12 +1,12 @@
 import React, {useContext} from 'react';
 
-import Header from './components/Header';
-import AnimRoutes from './components/AnimRoutes';
+import Header from './components/Header.js';
+import AnimRoutes from './components/AnimRoutes.js';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { motion } from 'framer-motion';
 
-import { CursorContext } from './context/CursorContext';
+import { CursorContext } from './context/CursorContext.js';
 
 const App = () => {
   const { cursorVariants, cursorBG } = useContext(CursorContext);

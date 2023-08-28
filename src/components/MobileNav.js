@@ -18,7 +18,9 @@ const menuVariants = {
 };
 
 const MobileNav = () => {
+
   const [openMenu, setOpenMenu] = useState(false);
+  
   return (
     <nav className='text-primary md:hidden'>
       <div
