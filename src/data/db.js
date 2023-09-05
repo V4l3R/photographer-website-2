@@ -31,3 +31,32 @@
 
 // // Finally write db.data content to file
 // await db.write()
+
+// const json = JSON.parse("./db.json")
+
+// const fs = require("fs");
+// var fs = require('fs');
+
+// reading a JSON file asynchronously
+// fs.readFile("user.json", (error, data) => {
+//     // if the reading process failed,
+//     // throwing the error
+//     if (error) {
+//         // logging the error
+//         console.error(error);
+
+//         throw error;
+//     }
+
+//     // parsing the JSON object
+//     // to convert it to a JavaScript object
+//     const user = JSON.parse(data);
+
+//     // printing the JavaScript object
+//     // retrieved from the JSON file
+//     console.log(user);
+// });
+
+// export function getJson() {
+//     console.log();
+// }

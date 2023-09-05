@@ -20,8 +20,8 @@ const Header = () => {
       <div className='flex flex-col md:flex-row md:items-center pr-0 w-full justify-between'>
         { /* Logo */}
         <Link onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} to={'/'} className='max-w-[300px] mt-[30px] ml-[30px] mr-[30px] md:mr-0'>
-          {/* <img src={Logo} alt='Logo' className='mt-[-1.5em]' /> */}
-          A
+          <img src={Logo} alt='Logo' className='mt-[-1.5em]' />
+          {/* A */}
         </Link>
 
         <nav onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler} className='hidden md:flex gap-x-[6vw] md:gap-x-6 lg:gap-x-8 xl:gap-x-12 font-semibold text-lg mr-[1.5vw] xl:mr-0'>
