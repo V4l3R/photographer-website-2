@@ -99,13 +99,14 @@ const Admin = () => {
   }
 
 
-  // function test() {
+  // function test() { 
   function createNewAlbum() {
 
     let formData = new FormData();
     formData.append("newAlbumName", newAlbumName);
 
-    return http.post("/createAlbum", formData, {
+    // return http.post("/createAlbum", formData, {
+    return http.post("/saveAlbum", formData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -124,20 +125,26 @@ const Admin = () => {
   }
 
   function initialize() {
-    fetch("/getAlbums")
+    // fetch("/getAlbums")
+    fetch("/getAlbumsList")
       .then((res) => res.json())
       .then((data) => {
-        setAlbumsList(data.albums);
-        setDeletedAlbumName(data.albums[0]);
-        setTargetedAlbumName(data.albums[0]);
+        console.log("initialize");
+        console.log(data);
+        setAlbumsList(data.albumsName);
+        setDeletedAlbumName(data.albumsName[0]);
+        setTargetedAlbumName(data.albumsName[0]);
       });
   }
 
   function getAlbums() {
-    fetch("/getAlbums")
+    // fetch("/getAlbums")
+    fetch("/getAlbumsList")
       .then((res) => res.json())
       .then((data) => {
-        setAlbumsList(data.albums);
+        console.log("getAlb");
+        console.log(data);
+        setAlbumsList(data.albumsName);
       });
   }
 

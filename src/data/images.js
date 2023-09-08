@@ -17,15 +17,7 @@ function createCollections() {
 
   COLLECTIONS.forEach((element) => {
 
-    // console.log("on a comme element : ");
-    // console.log(element);
-    // console.log("on a comme collection : ");
-    // console.log(element.collection);
-
     for (var key in element.collection) {
-
-      // console.log("on a comme image : ");
-      // console.log(element.collection[key]);
 
       const image = {};
 
@@ -43,15 +35,64 @@ function createCollections() {
   return collections;
 }
 
-function createCollection(collection) {
-  
+export function createCollection(collection) {
+
+  const album = [];
+  // console.log("on a comme collection :");
+  // console.log(collection);
+
+  // console.log("On est dans createCollection, avec pour collection : ");
+  // console.log(collection);
+
+  collection?.pictures?.forEach((picture, index) => {
+
+    const image = {};
+
+    // var path = element.collection[key];
+    // var path = picture.path;
+    // var path = 'http://localhost:3001/'.concat(picture.path);
+    // var path = '/static/media/woman.85d5b6e726b942f6d6ac.png';
+    // var path = '../../../../photographer-website-back/albums/Collection%201/1.png';
+
+    console.log("on passe dans pic");
+    var path = 'data:image/png;base64, '.concat(picture.base64);
+    image.src = path;
+    image.id = index;
+    // const dimensions = fetchImageSize(path);
+    const dimensions = {};
+    image.width = dimensions.width;
+    image.height = dimensions.height;
+    // image.collectionName = "2";
+    image.collectionName = collection.albumName;
+
+    // const picName = removeExtFromName(picture.name);
+    const picName = picture.name;
+    image.customOverlay = <div className='h-full flex items-end'><div className='whitespace-nowrap overflow-ellipsis overflow-clip'>{picName}</div></div>;
+    // image.caption = picName;
+
+    image.isSelected = false;
+    album.push(image);
+
+  })
+
+  // console.log("on retourne l'album : ");
+  // console.log(album);
+
+  return album;
 }
 
-let images = createCollections();
+// let images = createCollections();
+// export default images;
 
 export function reset() {
-  resetColl();
-  images = createCollections();
+  // resetColl();
+  // images = createCollections();
 }
 
-export default images;
+function removeExtFromName(picName) {
+
+  const array = picName.split('.');
+  array.pop();
+  return array.length > 0 ? array.join('.') : picName;
+
+}
