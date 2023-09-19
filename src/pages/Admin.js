@@ -351,6 +351,8 @@ const Admin = () => {
     },
    })
    .then((res) => {
+    console.log(res);
+    setSuccessMessage('Paramètre mis à jour');
     refreshSettings(targetedSettingsName);
    })
    .catch((error) => {

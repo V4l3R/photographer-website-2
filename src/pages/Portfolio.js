@@ -213,7 +213,6 @@ const Portfolio = () => {
   fetch('/getAlbumsList')
    .then((res) => res.json())
    .then((data) => {
-    console.log(data);
     setCollections(data.albumsName);
     // setCurrentImgList(createCollection(data.collections[0]))
    });
@@ -323,8 +322,8 @@ const Portfolio = () => {
 
  function renameAlbum() {
   let formData = new FormData();
-  // let newAlbumName = "test46";
   let newAlbumName = updatedAlbumName;
+
   formData.append('newAlbumName', newAlbumName);
   formData.append('targetedAlbumName', currentCollection);
   formData.append('adminUsername', adminUsername);
