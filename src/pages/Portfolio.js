@@ -21,18 +21,20 @@ import GalleryList from '../components/GalleryList';
 
 // import collections from '../data/collections';
 
-// import images, { createCollection, reset } from '../data/images';
-import images, { createCollection, reset } from '../data/imagesDumb';
+import images, { createCollection, reset } from '../data/images';
+// import images, { createCollection, reset } from '../data/imagesDumb';
 
 import http from "../common/http-common";
 
 
 import { DEFAULT_COLLECTION, GALLERY_IMAGE_HEIGHT, GALLERY_IMAGE_MARGIN } from '../data/constantes';
+import { SettingsContext } from '../context/SettingsContext';
 
 const Portfolio = () => {
 
   const { mouseEnterHandler, mouseLeaveHandler, mouseDisappearHandler } = useContext(CursorContext);
-  const [currentCollection, setCurrentCollection] = useState(DEFAULT_COLLECTION);
+  const { galleryImageHeight, gallerySpacing } = useContext(SettingsContext);
+  const [currentCollection, setCurrentCollection] = useState("");
   const [imageList, setImageList] = useState([]);
   const [imageListSrc, setImageListSrc] = useState([]);
 
@@ -48,7 +50,7 @@ const Portfolio = () => {
   const [isOpenAlbCreatePopup, setIsOpenAlbCreatePopup] = useState(false)
   const [isOpenAlbRenamePopup, setIsOpenAlbRenamePopup] = useState(false)
   const [isOpenAlbDeletePopup, setIsOpenAlbDeletePopup] = useState(false)
-  const [currentFile, setCurrentFile] = useState(undefined)
+  const [currentFile, setCurrentFile] = useState([])
 
   const [imageList2, setImageList2] = useState([]);
   const [currentImgList, setCurrentImgList] = useState([]);
@@ -59,10 +61,11 @@ const Portfolio = () => {
 
   useEffect(() => {
 
-    dumb();
+    // dumb();
 
+    getCollections();
+    getDefaultCollection();
     // getImgList();
-    // getCollections();
 
     // getCollections().then(() => {
     // })
@@ -213,6 +216,18 @@ const Portfolio = () => {
       });
   }
 
+  function getCollectionsAndSetDefaultAlbum() {
+    fetch("/getAlbumsList")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setCollections(data.albumsName);
+        setCurrentCollection(data.albumsName[0]);
+        changeImgList(data.albumsName[0]);
+        // setCurrentImgList(createCollection(data.collections[0]))
+      });
+  }
+
   function refreshCollections(actualCollection) {
     fetch("/getAlbumsList")
       .then((res) => res.json())
@@ -244,6 +259,29 @@ const Portfolio = () => {
         setCollections(data.albumsName);
         setCurrentCollection(data.albumsName[0]);
         changeImgList(data.albumsName[0]);
+        // setCurrentImgList(createCollection(data.collections[0]))
+      });
+  }
+
+  function getDefaultCollection() {
+    fetch("/getDefaultAlbumName")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("getDefaultAlbumName : ");
+        console.log(data);
+        console.log(data.defaultAlbumName);
+        // setCollections(data.albumsName);
+
+        if(data.defaultAlbumName === "") {
+          getCollectionsAndSetDefaultAlbum();
+        } else {
+          getCollections();
+          setCurrentCollection(data.defaultAlbumName);
+          changeImgList(data.defaultAlbumName);
+        }
+
+        // setCurrentCollection(data.albumsName[0]);
+        // changeImgList(data.albumsName[0]);
         // setCurrentImgList(createCollection(data.collections[0]))
       });
   }
@@ -281,8 +319,8 @@ const Portfolio = () => {
   function renameAlbum() {
 
     let formData = new FormData();
-    let newAlbumName = "test46";
-    // let newAlbumName = updatedAlbumName;
+    // let newAlbumName = "test46";
+    let newAlbumName = updatedAlbumName;
     formData.append("newAlbumName", newAlbumName);
     formData.append("targetedAlbumName", currentCollection);
 
@@ -310,7 +348,7 @@ const Portfolio = () => {
 
   function addPictures() {
 
-    if (currentCollection === "" || listSelectedImg.length < 1) {
+    if (currentCollection === "" || currentFile.length < 1) {
       return;
     }
 
@@ -330,7 +368,7 @@ const Portfolio = () => {
     })
       .then(res => {
         changeImgList(currentCollection);
-        setCurrentFile(undefined);
+        setCurrentFile([]);
         document.getElementById('uploadFile').value = "";
         closeAddPicturePopup();
       })
@@ -604,6 +642,12 @@ const Portfolio = () => {
 
   }
 
+  function handleEnter(event, func) {
+    if (event.key === "Enter") {
+      func()
+    }
+  }
+
   function clg() {
     console.log(imageList);
     // console.log(importAll(require.context('../../../photographer-website-back/albums/Petits%20chats/', false, /\.(png|jpe?g|svg)$/)));
@@ -649,7 +693,7 @@ const Portfolio = () => {
                     {isOpenAlbCreatePopup &&
                       <div className='flex'>
                         {/* <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' /> */}
-                        <input type="text" name="" placeholder='Nouvel album' id="addAlbumText" onChange={e => setNewAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
+                        <input type="text" name="" placeholder='Nouvel album' id="addAlbumText" onKeyUp={e => handleEnter(e, createNewAlbum)} onChange={e => setNewAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
                         <div onClick={createNewAlbum} className={`${newAlbumName === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
                           <AiFillCheckCircle />
                         </div>
@@ -662,7 +706,7 @@ const Portfolio = () => {
                     {/* <div onClick={deletePicture}> */}
                     {isOpenAlbRenamePopup &&
                       <div className='flex'>
-                        <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
+                        <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onKeyUp={e => handleEnter(e, renameAlbum)} onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
                         <div onClick={renameAlbum} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
                           <AiFillCheckCircle />
                         </div>
@@ -674,7 +718,7 @@ const Portfolio = () => {
                     {isOpenPicAddPopup &&
                       <form className='flex'>
                         <input id="uploadFile" type="file" accept="image/*" multiple="multiple" onChange={selectFile} />
-                        <div onClick={addPictures} className={`${listSelectedImg.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                        <div onClick={addPictures} className={`${currentFile.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
                           <AiFillCheckCircle />
                         </div>
                         <div onClick={closeAddPicturePopup}>
@@ -685,7 +729,7 @@ const Portfolio = () => {
                     }
                     {isOpenPicRenamePopup &&
                       <div className='flex'>
-                        <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onChange={e => setUpdatedPictureName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
+                        <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onKeyUp={e => handleEnter(e, renamePicture)} onChange={e => setUpdatedPictureName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
                         <div onClick={renamePicture} className={`${listSelectedImg.length !== 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
                           <AiFillCheckCircle />
                         </div>
@@ -733,14 +777,15 @@ const Portfolio = () => {
                     <div onClick={toggleDeletePicturePopup} className={`${listSelectedImg.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicDeletePopup ? 'border-b-2 border-black' : ''}`}>
                       <BsFillTrashFill />
                     </div>
+                    {/* <div onClick={toggleDeleteAlbumPopup} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbDeletePopup ? 'border-b-2 border-black' : ''}`}> */}
                     <div onClick={toggleDeleteAlbumPopup} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbDeletePopup ? 'border-b-2 border-black' : ''}`}>
                       <GiChewedSkull />
                     </div>
                   </div>
                 </div>
-                <Gallery images={imageList} margin={GALLERY_IMAGE_MARGIN} enableImageSelection={true} rowHeight={GALLERY_IMAGE_HEIGHT} onSelect={(index, img, el) => selectImg(index, img)} onClick={(e) => { openImageViewer(e) }} />
-                {/* <Gallery images={currentImgList} margin={GALLERY_IMAGE_MARGIN} enableImageSelection={true} rowHeight={GALLERY_IMAGE_HEIGHT} onSelect={(index, img, el) => selectImg(index, img)} onClick={(e) => { openImageViewer(e) }} /> */}
-                {/* <Gallery images={imageList} margin={GALLERY_IMAGE_MARGIN} enableImageSelection={true} rowHeight={GALLERY_IMAGE_HEIGHT} onClick={(e) => { openImageViewer(e) }} /> */}
+                <Gallery images={imageList} margin={gallerySpacing} enableImageSelection={true} rowHeight={galleryImageHeight} onSelect={(index, img, el) => selectImg(index, img)} onClick={(e) => { openImageViewer(e) }} />
+                {/* <Gallery images={currentImgList} margin={gallerySpacing} enableImageSelection={true} rowHeight={galleryImageHeight} onSelect={(index, img, el) => selectImg(index, img)} onClick={(e) => { openImageViewer(e) }} /> */}
+                {/* <Gallery images={imageList} margin={gallerySpacing} enableImageSelection={true} rowHeight={galleryImageHeight} onClick={(e) => { openImageViewer(e) }} /> */}
               </motion.div>
             </div>
             <div className=''>

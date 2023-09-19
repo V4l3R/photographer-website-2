@@ -1,5 +1,5 @@
 // export const DEFAULT_COLLECTION = 'Printemps';
-export const DEFAULT_COLLECTION = '2';
+// export const DEFAULT_COLLECTION = '2';
 
 export const GALLERY_IMAGE_HEIGHT = '200px';
 export const GALLERY_IMAGE_MARGIN = '2px';

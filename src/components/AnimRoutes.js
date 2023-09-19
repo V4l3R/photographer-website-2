@@ -9,6 +9,8 @@ import Login from '../pages/Login';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Admin from '../pages/Admin';
+import UpdatePassword from '../pages/UpdatePassword';
+import UpdateUsername from '../pages/UpdateUsername';
 
 
 const AnimRoutes = () => {
@@ -22,6 +24,8 @@ const AnimRoutes = () => {
         <Route path='/contact' element={<Contact />} />
         <Route path='/login' element={<Login />} />
         <Route path='/admin' element={<Admin />} />
+        <Route path='/updatePassword' element={<UpdatePassword />} />
+        <Route path='/updateUsername' element={<UpdateUsername />} />
       </Routes>
     </AnimatePresence>
   );

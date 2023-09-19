@@ -9,10 +9,15 @@ import { transition1 } from '../transitions';
 import { AdminContext } from '../context/AdminContext';
 import { useEffect } from 'react';
 
+import http from "../common/http-common";
+import bcrypt from 'bcryptjs'
+
 const Login = () => {
 
   const USERNAME = "test@test.com";
   const PASSWORD = "test";
+
+  const SALT = "$2a$10$4W7wNGhS/kyiouV/Dqo.vu";
 
   const navigate = useNavigate();
 
@@ -22,23 +27,25 @@ const Login = () => {
   const [queryParameters] = useSearchParams();
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [connectedMessage, setConnectedMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [notConnectedMessage, setNotConnectedMessage] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [message, setMessage] = useState(false);
   const [name, setName] = useState(false);
-  const [username, setUsername] = useState(false);
-  const [password, setPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [notAdmin, setNotAdmin] = useState(false);
+  const [isLostPassword, setIsLostPassword] = useState(false);
 
-useEffect(() => {
 
-  setIsAdmin(false);
+  useEffect(() => {
 
-  return () => {
-  }
+    setIsAdmin(false);
 
-}, [])
+    return () => {
+    }
+
+  }, [])
 
 
   const validateEmail = (e) => {
@@ -50,38 +57,110 @@ useEffect(() => {
     } else {
       setNotAdmin(false);
       setErrorMessage("L'identifiant doit être un email");
-      setConnectedMessage("");
+      setSuccessMessage("");
       setValidEmail(false);
     }
   };
 
   function SubmitButton() {
-    if (validEmail && password !== "") {
-      return <button onClick={Connect} className='btn'>Envoyer</button>
+    if (!isLostPassword) {
+      if (validEmail && password !== "") {
+        return <button onClick={connect} className='btn'>Connexion</button>
+      } else {
+        return <div style={{ opacity: 0.4 }} className='btn'>Connexion</div>
+      };
     } else {
-      return <div style={{ opacity: 0.4 }} className='btn'>Envoyer</div>
-    };
+      if (validEmail) {
+        return <button onClick={recoverPassword} className='btn'>Récupérer</button>
+      } else {
+        return <div style={{ opacity: 0.4 }} className='btn'>Récupérer</div>
+      };
+    }
   };
 
-  function Connect() {
-    if (username === USERNAME && password === PASSWORD) {
-      setNotAdmin(false);
-      setIsAdmin(true);
-      setConnectedMessage("Connecté !")
-      navigate("/admin");
-    } else {
-      setErrorMessage("");
-      setConnectedMessage("");
-      setNotConnectedMessage("Identifiants incorrects");
-      setNotAdmin(true);
-    }
+  function connect() {
+    
+    if(!validEmail || password === "") return;
+
+    let formData = new FormData();
+
+    formData.append("username", username);
+    formData.append("password", bcrypt.hashSync(password, SALT));
+
+    return http.post("/connect", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setNotAdmin(false);
+        setIsAdmin(true);
+        setErrorMessage("");
+        setSuccessMessage("Connecté !")
+        navigate("/admin");
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage(error.response.data);
+        setSuccessMessage("");
+        // setNotConnectedMessage("Identifiants incorrects");
+        setNotAdmin(true);
+      })
+
+  }
+
+  function recoverPassword() {
+
+    if(!validEmail) return;
+
+    let formData = new FormData();
+
+    formData.append("username", username);
+
+    return http.post("/recoverPassword", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        // setNotAdmin(false);
+        // setIsAdmin(true);
+        // setErrorMessage("");
+        setSuccessMessage("Mail envoyé !")
+        setIsLostPassword(false);
+        // navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage(error.response.data);
+        // setConnectedMessage("");
+        // setNotConnectedMessage("Identifiants incorrects");
+        // setNotAdmin(true);
+      })
+
   }
 
   function AdminConnected() {
     if (isAdmin) {
-      return <motion.span exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 1.9 }} style={{ fontWeight: "bold", color: "green", textAlign: "center" }} className='w-full absolute left-0 -mt-6' >{connectedMessage}</motion.span>
+      return <motion.span exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 1.9 }} style={{ fontWeight: "bold", color: "green", textAlign: "center" }} className='w-full absolute left-0 -mt-6' >{successMessage}</motion.span>
     } else if (notAdmin) {
       return <span style={{ fontWeight: "bold", color: "red", textAlign: "center" }} className='w-full absolute left-0 -mt-6' >{notConnectedMessage}</span>
+    }
+  }
+
+  function toggleLostPassword() {
+    setUsername("");
+    setPassword("");
+    setErrorMessage("");
+    setValidEmail(false);
+    setIsLostPassword(!isLostPassword);
+  }
+
+  function handleEnter(event, func) {
+    if (event.key === "Enter") {
+      func()
     }
   }
 
@@ -125,10 +204,21 @@ useEffect(() => {
             {/* <form action="/" method="POST" className='flex flex-col gap-y-4'> */}
             <div className=''>
               <AdminConnected />
-              <div style={{ fontWeight: "bold", color: "red", textAlign: "center" }} className='w-full absolute left-0 -mt-6' >{errorMessage}</div>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 3.0 }} style={{ fontWeight: "bold", color: "red", textAlign: "center" }} className={`w-full absolute left-0 ${isLostPassword ? 'mt-2' : '-mt-6'}`} >{errorMessage}</motion.div>
               <div className='flex flex-col gap-y-4 md:px-[5vw] lg:px-[10vw] xxl:px-[15vw]'>
-                <motion.input initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.3 }} type="text" name="identifiant" id="identifiant" placeholder='Identifiant' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' onChange={e => setUsername(e.target.value)} onBlur={(e) => validateEmail(e)} />
-                <motion.input initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.7 }} type="password" name="password" id="password" placeholder='Mot de passe' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' onChange={e => setPassword(e.target.value)} />
+                {!isLostPassword &&
+                  <>
+                    <motion.input initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.3 }} type="text" name="identifiant" id="identifiant" placeholder='Adresse email' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' onKeyUp={e => handleEnter(e, connect)} onChange={e => setUsername(e.target.value)} onBlur={(e) => validateEmail(e)} />
+                    <motion.input initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.7 }} type="password" name="password" id="password" placeholder='Mot de passe' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 placeholder:text-[#757879]' onKeyUp={e => handleEnter(e, connect)} onChange={e => setPassword(e.target.value)} />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.9 }} className='text-end cursor-pointer' onClick={toggleLostPassword}>Mot de passe oublié ?</motion.div>
+                  </>
+                }
+                {isLostPassword &&
+                  <>
+                    <motion.input initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.3 }} type="text" name="identifiant" id="identifiant" placeholder='Adresse email' className='outline-none border-b border-b-primary h-[60px] bg-transparent font-secondary w-full pl-3 mt-8 placeholder:text-[#757879]' onKeyUp={e => handleEnter(e, recoverPassword)} onChange={e => setUsername(e.target.value)} onBlur={(e) => validateEmail(e)} />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ transition: transition1, duration: 2.9 }} className='text-end cursor-pointer' onClick={toggleLostPassword}>Revenir à l'écran de connexion</motion.div>
+                  </>
+                }
               </div>
             </div>
           </div>

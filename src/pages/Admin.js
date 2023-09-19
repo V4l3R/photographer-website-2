@@ -12,9 +12,11 @@ import { transition1 } from '../transitions';
 import { AdminContext } from '../context/AdminContext';
 import { getJson } from '../data/db';
 import { useEffect } from 'react';
+import { SettingsContext } from '../context/SettingsContext';
 
 const Admin = () => {
 
+  const { getSettingsContext, settings, setSettings } = useContext(SettingsContext);
 
   const [currentFile, setCurrentFile] = useState(undefined)
   const [previewImage, setPreviewImage] = useState(undefined)
@@ -23,6 +25,7 @@ const Admin = () => {
   const [imageInfos, setImageInfos] = useState([])
 
   const [newAlbumName, setNewAlbumName] = useState("")
+  const [newSettingValue, setNewSettingValue] = useState("")
   const [albumsList, setAlbumsList] = useState([])
   const [deletedAlbumName, setDeletedAlbumName] = useState("")
   const [targetedAlbumName, setTargetedAlbumName] = useState("")
@@ -32,10 +35,16 @@ const Admin = () => {
   const [deletePopupAnimationScale, setDeletePopupAnimationScale] = useState(0);
   const [settingsPopupAnimationScale, setSettingsPopupAnimationScale] = useState(0);
 
+  // const [settings, setSettings] = useState([]);
+  const [targetedSettingsName, setTargetedSettingsName] = useState("")
+
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     initialize();
+    getDefaultCollectionName();
+    getSettings();
 
     return () => {
     }
@@ -78,7 +87,7 @@ const Admin = () => {
     // fetch("/api")
     //   .then((res) => res.json())
     //   .then((data) => console.log(data.message));
-    console.log(deletedAlbumName);
+    console.log(targetedSettingsName);
   }
 
 
@@ -98,8 +107,33 @@ const Admin = () => {
     upload(currentFile);
   }
 
+  function getDefaultCollectionName() {
+    fetch("/getDefaultAlbumName")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("getDefaultCollectionName : ");
+        console.log(data);
+        console.log(data.defaultAlbumName);
+        setTargetedAlbumName(data.defaultAlbumName);
+      });
+  }
 
-  // function test() { 
+  function changeDefaultCollection() {
+
+    let formData = new FormData();
+    formData.append("targetedAlbumName", targetedAlbumName);
+
+    return http.post("/updateDefaultAlbum", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((error) => {
+      console.log(error);
+      setErrorMessage(error.response.data);
+    });
+
+  }
+
   function createNewAlbum() {
 
     let formData = new FormData();
@@ -112,7 +146,7 @@ const Admin = () => {
       },
     })
       .then(res => {
-        if(targetedAlbumName === undefined) {
+        if (targetedAlbumName === "") {
           initialize();
         } else {
           getAlbums();
@@ -133,7 +167,7 @@ const Admin = () => {
         console.log(data);
         setAlbumsList(data.albumsName);
         setDeletedAlbumName(data.albumsName[0]);
-        setTargetedAlbumName(data.albumsName[0]);
+        // setTargetedAlbumName(data.albumsName[0]);
       });
   }
 
@@ -148,17 +182,84 @@ const Admin = () => {
       });
   }
 
+  function getSettings() {
+
+    getSettingsContext().then(settings => {
+
+      setSettings(settings);
+      setTargetedSettingsName(settings[0].name);
+      setNewSettingValue(settings[0].value);
+
+    })
+
+    // fetch("/getSettings")
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log("getSettings");
+    //     console.log(data);
+    //     // setSettings(data.settings);
+    //     // setTargetedSettingsName(data.settings[0].name);
+    //     // setNewSettingValue(data.settings[0].value);
+    //     // setAlbumsList(data.albumsName);
+    //   });
+  }
+
+  function refreshSettings(settingName) {
+
+    getSettingsContext().then(settings => {
+
+      setSettings(settings);
+
+      for (let i = 0; i < settings.length; i++) {
+        const setting = settings[i];
+
+        if (setting.name === settingName) {
+          setTargetedSettingsName(setting.name);
+          setNewSettingValue(setting.value);
+        }
+      }
+
+    })
+
+  }
+
+  function findSettingByName(settingName) {
+
+    console.log("findSettingByName");
+    console.log(settings);
+
+    for (let i = 0; i < settings.length; i++) {
+      const setting = settings[i];
+
+      if (setting.name === settingName) {
+        return setting;
+      }
+    }
+
+    return null;
+  }
+
   // function updateAlbumList()
 
-  function deleteAlbum() {
-    let formData = new FormData();
-    formData.append("deletedAlbumName", deletedAlbumName);
+  function updateUsername() {
 
-    return http.post("/test", formData, {
+    let formData = new FormData();
+
+    return http.post("/resetUsername", formData, {
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((error) => {
+    })
+      .then((res) => {
+        console.log(res);
+        // setNotAdmin(false);
+        // setIsAdmin(true);
+        // setErrorMessage("");
+        setSuccessMessage("Vérifiez votre boite mail !")
+        // setIsLostPassword(false);
+        // navigate("/login");
+      })
+      .catch((error) => {
       console.log(error);
       setErrorMessage(error.response.data);
     });
@@ -186,10 +287,47 @@ const Admin = () => {
     });
   }
 
+  function changeCurrentSetting(newSettingName) {
+
+    setTargetedSettingsName(newSettingName);
+    let setting = findSettingByName(newSettingName);
+
+    console.log("change current setting : ");
+    console.log(setting);
+
+    if (setting !== null) {
+      setNewSettingValue(setting.value);
+    }
+
+  }
+
+  function updateSetting() {
+
+    let formData = new FormData();
+    formData.append("settingName", targetedSettingsName);
+    formData.append("newValue", newSettingValue);
+
+    return http.post("/updateSetting", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        refreshSettings(targetedSettingsName);
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage(error.response.data);
+      });
+
+  }
+
   return (
     <>
       <div className='flex flex-col items-center justify-center h-[100vh] border-4 border-blue-400'>
         <div className='border-4 border-red-400 h-[60vh] w-[50vw] px-10 flex flex-col gap-y-16 items-center justify-center'>
+          <div>{successMessage}</div>
+          <div>{errorMessage}</div>
           <div className='flex gap-x-8 w-full justify-center'>
             <input type="text" name="" placeholder='Nouvel album' id="addAlbumText" className='w-[17vw] outline-none border-b border-b-primary bg-transparent font-secondary text-center placeholder:text-[#757879]' onChange={e => setNewAlbumName(e.target.value)} />
             <button onClick={createNewAlbum} className='btn w-[17vw]'>
@@ -200,20 +338,36 @@ const Admin = () => {
             <button onClick={openEditAlbumPopup} className='btn w-[17vw]'>
               Modifier un album
             </button>
-            <button onClick={deleteAlbum} className='btn w-[17vw]'>
-              Supprimer un album
+            <button onClick={updateUsername} className='btn w-[17vw]'>
+              Changer d'email
             </button>
           </div>
-          <button onClick={getClg} className='btn w-[17vw]'>
-            Réglages
-          </button>
-          <select name="" id="" value={targetedAlbumName} onChange={e => setTargetedAlbumName(e.target.value)}>
-            {
-              albumsList.map(x =>
-                <option>{x}</option>
-              )
-            }
-          </select>
+          <div className='flex gap-x-8 w-full justify-center'>
+            <select name="" id="" value={targetedSettingsName} onChange={e => changeCurrentSetting(e.target.value)}>
+              {
+                settings.map(x =>
+                  <option value={x.name}>{x.label}</option>
+                )
+              }
+            </select>
+            <input type="text" name="" placeholder="Modifier la valeur" value={newSettingValue} id="" className='w-[17vw] outline-none border-b border-b-primary bg-transparent font-secondary text-center placeholder:text-[#757879]' onChange={e => setNewSettingValue(e.target.value)} />
+            <button onClick={updateSetting} className='btn w-[17vw]'>
+              Réglages
+            </button>
+          </div>
+          <div className='flex gap-x-8 w-full justify-center'>
+            <div>Selectionner l'album par défaut : </div>
+            <select name="" id="" value={targetedAlbumName} onChange={e => setTargetedAlbumName(e.target.value)}>
+              {
+                albumsList.map(x =>
+                  <option>{x}</option>
+                )
+              }
+            </select>
+            <button onClick={changeDefaultCollection} className='btn w-[17vw]'>
+              Envoyer
+            </button>
+          </div>
           {/* <div>
             {{ errorMessage }}
           </div> */}

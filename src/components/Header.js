@@ -9,10 +9,12 @@ import { BiExit } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import { CursorContext } from '../context/CursorContext';
 import { AdminContext } from '../context/AdminContext.js';
+import { SettingsContext } from '../context/SettingsContext';
 
 const Header = () => {
 
   const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
+
   const { isAdmin } = useContext(AdminContext);
 
   return (
