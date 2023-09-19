@@ -29,15 +29,17 @@ import http from "../common/http-common";
 
 import { DEFAULT_COLLECTION, GALLERY_IMAGE_HEIGHT, GALLERY_IMAGE_MARGIN } from '../data/constantes';
 import { SettingsContext } from '../context/SettingsContext';
+import { AdminContext } from '../context/AdminContext';
 
 const Portfolio = () => {
 
   const { mouseEnterHandler, mouseLeaveHandler, mouseDisappearHandler } = useContext(CursorContext);
   const { galleryImageHeight, gallerySpacing } = useContext(SettingsContext);
+  const { isAdmin, adminUsername, accessToken } = useContext(AdminContext);
+
   const [currentCollection, setCurrentCollection] = useState("");
   const [imageList, setImageList] = useState([]);
   const [imageListSrc, setImageListSrc] = useState([]);
-
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -272,7 +274,7 @@ const Portfolio = () => {
         console.log(data.defaultAlbumName);
         // setCollections(data.albumsName);
 
-        if(data.defaultAlbumName === "") {
+        if (data.defaultAlbumName === "") {
           getCollectionsAndSetDefaultAlbum();
         } else {
           getCollections();
@@ -294,6 +296,8 @@ const Portfolio = () => {
 
     let formData = new FormData();
     formData.append("newAlbumName", newAlbumName);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     // return http.post("/createAlbum", formData, {
     return http.post("/saveAlbum", formData, {
@@ -323,6 +327,8 @@ const Portfolio = () => {
     let newAlbumName = updatedAlbumName;
     formData.append("newAlbumName", newAlbumName);
     formData.append("targetedAlbumName", currentCollection);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     // return http.post("/createAlbum", formData, {
     return http.post("/renameAlbum", formData, {
@@ -360,6 +366,8 @@ const Portfolio = () => {
     }
 
     formData.append("targetedAlbumName", currentCollection);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     return http.post("/uploadPictures", formData, {
       headers: {
@@ -515,6 +523,8 @@ const Portfolio = () => {
     formData.append("targetedAlbumName", currentCollection);
     formData.append("updatedPicture", listSelectedImg);
     formData.append("updatedPictureName", updatedPictureName);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     return http.post("/updatePictureName", formData, {
       headers: {
@@ -548,6 +558,8 @@ const Portfolio = () => {
     // }
     formData.append("deletedPictures", listSelectedImg);
     formData.append("targetedAlbumName", currentCollection);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     // return http.post("/test", formData, {
     return http.post("/deleteAlbumPictures", formData, {
@@ -572,6 +584,8 @@ const Portfolio = () => {
     let formData = new FormData();
 
     formData.append("targetedAlbumName", currentCollection);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     // return http.post("/test", formData, {
     return http.post("/deleteAlbum", formData, {
@@ -689,99 +703,102 @@ const Portfolio = () => {
                       </select>
                     </div>
                   </div>
-                  <div className='flex'>
-                    {isOpenAlbCreatePopup &&
+                  {isAdmin &&
+                    <>
                       <div className='flex'>
-                        {/* <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' /> */}
-                        <input type="text" name="" placeholder='Nouvel album' id="addAlbumText" onKeyUp={e => handleEnter(e, createNewAlbum)} onChange={e => setNewAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
-                        <div onClick={createNewAlbum} className={`${newAlbumName === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
-                          <AiFillCheckCircle />
+                        {isOpenAlbCreatePopup &&
+                          <div className='flex'>
+                            {/* <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' /> */}
+                            <input type="text" name="" placeholder='Nouvel album' id="addAlbumText" onKeyUp={e => handleEnter(e, createNewAlbum)} onChange={e => setNewAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
+                            <div onClick={createNewAlbum} className={`${newAlbumName === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                              <AiFillCheckCircle />
+                            </div>
+                            <div onClick={closeCreateAlbumPopup}>
+                              <AiFillCloseCircle />
+                            </div>
+                          </div>
+                        }
+                        {/* <button onClick={createNewAlbum} className='w-[17vw]'> */}
+                        {/* <div onClick={deletePicture}> */}
+                        {isOpenAlbRenamePopup &&
+                          <div className='flex'>
+                            <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onKeyUp={e => handleEnter(e, renameAlbum)} onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
+                            <div onClick={renameAlbum} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                              <AiFillCheckCircle />
+                            </div>
+                            <div onClick={closeRenameAlbumPopup}>
+                              <AiFillCloseCircle />
+                            </div>
+                          </div>
+                        }
+                        {isOpenPicAddPopup &&
+                          <form className='flex'>
+                            <input id="uploadFile" type="file" accept="image/*" multiple="multiple" onChange={selectFile} />
+                            <div onClick={addPictures} className={`${currentFile.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                              <AiFillCheckCircle />
+                            </div>
+                            <div onClick={closeAddPicturePopup}>
+                              <AiFillCloseCircle />
+                            </div>
+                            {/* <button onClick={clgFile}>Envoyer</button> */}
+                          </form>
+                        }
+                        {isOpenPicRenamePopup &&
+                          <div className='flex'>
+                            <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onKeyUp={e => handleEnter(e, renamePicture)} onChange={e => setUpdatedPictureName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
+                            <div onClick={renamePicture} className={`${listSelectedImg.length !== 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                              <AiFillCheckCircle />
+                            </div>
+                            <div onClick={closeRenamePicturePopup}>
+                              <AiFillCloseCircle />
+                            </div>
+                          </div>
+                        }
+                        {isOpenPicDeletePopup &&
+                          <div className='flex'>
+                            <div>Êtes-vous sûr de vouloir supprimer ces photos ? : </div>
+                            <div onClick={deletePictures} className={`${listSelectedImg.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                              <AiFillCheckCircle />
+                            </div>
+                            <div onClick={closeDeletePicturePopup}>
+                              <AiFillCloseCircle />
+                            </div>
+                          </div>
+                        }
+                        {isOpenAlbDeletePopup &&
+                          <div className='flex'>
+                            <div>Êtes-vous sûr de vouloir supprimer cet album ? : </div>
+                            <div onClick={deleteAlbum} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
+                              <AiFillCheckCircle />
+                            </div>
+                            <div onClick={closeDeleteAlbumPopup}>
+                              <AiFillCloseCircle />
+                            </div>
+                          </div>
+                        }
+                      </div>
+                      <div className='flex'>
+                        <div onClick={toggleCreateAlbumPopup} title="Ajouter un album" className={`${isOpenAlbCreatePopup ? 'border-b-2 border-black' : ''}`}>
+                          <MdAddToPhotos />
                         </div>
-                        <div onClick={closeCreateAlbumPopup}>
-                          <AiFillCloseCircle />
+                        <div onClick={toggleRenameAlbumPopup} title="Renommer l'album" className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbRenamePopup ? 'border-b-2 border-black' : ''}`}>
+                          <FaPenNib />
+                        </div>
+                        <div onClick={toggleAddPicturePopup} title="Ajouter des photos" className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicAddPopup ? 'border-b-2 border-black' : ''}`}>
+                          <MdAddPhotoAlternate />
+                        </div>
+                        <div onClick={toggleRenamePicturePopup} title="Renommer la photo" className={`${listSelectedImg.length !== 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicRenamePopup ? 'border-b-2 border-black' : ''}`}>
+                          <RiImageEditFill />
+                        </div>
+                        <div onClick={toggleDeletePicturePopup} title="Supprimer les photos" className={`${listSelectedImg.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicDeletePopup ? 'border-b-2 border-black' : ''}`}>
+                          <BsFillTrashFill />
+                        </div>
+                        <div onClick={toggleDeleteAlbumPopup} title="Supprimer l'album" className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbDeletePopup ? 'border-b-2 border-black' : ''}`}>
+                          <GiChewedSkull />
                         </div>
                       </div>
-                    }
-                    {/* <button onClick={createNewAlbum} className='w-[17vw]'> */}
-                    {/* <div onClick={deletePicture}> */}
-                    {isOpenAlbRenamePopup &&
-                      <div className='flex'>
-                        <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onKeyUp={e => handleEnter(e, renameAlbum)} onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
-                        <div onClick={renameAlbum} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
-                          <AiFillCheckCircle />
-                        </div>
-                        <div onClick={closeRenameAlbumPopup}>
-                          <AiFillCloseCircle />
-                        </div>
-                      </div>
-                    }
-                    {isOpenPicAddPopup &&
-                      <form className='flex'>
-                        <input id="uploadFile" type="file" accept="image/*" multiple="multiple" onChange={selectFile} />
-                        <div onClick={addPictures} className={`${currentFile.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
-                          <AiFillCheckCircle />
-                        </div>
-                        <div onClick={closeAddPicturePopup}>
-                          <AiFillCloseCircle />
-                        </div>
-                        {/* <button onClick={clgFile}>Envoyer</button> */}
-                      </form>
-                    }
-                    {isOpenPicRenamePopup &&
-                      <div className='flex'>
-                        <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onKeyUp={e => handleEnter(e, renamePicture)} onChange={e => setUpdatedPictureName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' />
-                        <div onClick={renamePicture} className={`${listSelectedImg.length !== 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
-                          <AiFillCheckCircle />
-                        </div>
-                        <div onClick={closeRenamePicturePopup}>
-                          <AiFillCloseCircle />
-                        </div>
-                      </div>
-                    }
-                    {isOpenPicDeletePopup &&
-                      <div className='flex'>
-                        <div>Êtes-vous sûr de vouloir supprimer ces photos ? : </div>
-                        <div onClick={deletePictures} className={`${listSelectedImg.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
-                          <AiFillCheckCircle />
-                        </div>
-                        <div onClick={closeDeletePicturePopup}>
-                          <AiFillCloseCircle />
-                        </div>
-                      </div>
-                    }
-                    {isOpenAlbDeletePopup &&
-                      <div className='flex'>
-                        <div>Êtes-vous sûr de vouloir supprimer cet album ? : </div>
-                        <div onClick={deleteAlbum} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'}`} >
-                          <AiFillCheckCircle />
-                        </div>
-                        <div onClick={closeDeleteAlbumPopup}>
-                          <AiFillCloseCircle />
-                        </div>
-                      </div>
-                    }
-                  </div>
-                  <div className='flex'>
-                    <div onClick={toggleCreateAlbumPopup} className={`${isOpenAlbCreatePopup ? 'border-b-2 border-black' : ''}`}>
-                      <MdAddToPhotos />
-                    </div>
-                    <div onClick={toggleRenameAlbumPopup} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbRenamePopup ? 'border-b-2 border-black' : ''}`}>
-                      <FaPenNib />
-                    </div>
-                    <div onClick={toggleAddPicturePopup} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicAddPopup ? 'border-b-2 border-black' : ''}`}>
-                      <MdAddPhotoAlternate />
-                    </div>
-                    <div onClick={toggleRenamePicturePopup} className={`${listSelectedImg.length !== 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicRenamePopup ? 'border-b-2 border-black' : ''}`}>
-                      <RiImageEditFill />
-                    </div>
-                    <div onClick={toggleDeletePicturePopup} className={`${listSelectedImg.length < 1 ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenPicDeletePopup ? 'border-b-2 border-black' : ''}`}>
-                      <BsFillTrashFill />
-                    </div>
-                    {/* <div onClick={toggleDeleteAlbumPopup} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbDeletePopup ? 'border-b-2 border-black' : ''}`}> */}
-                    <div onClick={toggleDeleteAlbumPopup} className={`${currentCollection === "" ? 'opacity-50' : 'opacity-100 cursor-pointer'} ${isOpenAlbDeletePopup ? 'border-b-2 border-black' : ''}`}>
-                      <GiChewedSkull />
-                    </div>
-                  </div>
+                    </>
+                  }
                 </div>
                 <Gallery images={imageList} margin={gallerySpacing} enableImageSelection={true} rowHeight={galleryImageHeight} onSelect={(index, img, el) => selectImg(index, img)} onClick={(e) => { openImageViewer(e) }} />
                 {/* <Gallery images={currentImgList} margin={gallerySpacing} enableImageSelection={true} rowHeight={galleryImageHeight} onSelect={(index, img, el) => selectImg(index, img)} onClick={(e) => { openImageViewer(e) }} /> */}

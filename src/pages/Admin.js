@@ -17,6 +17,7 @@ import { SettingsContext } from '../context/SettingsContext';
 const Admin = () => {
 
   const { getSettingsContext, settings, setSettings } = useContext(SettingsContext);
+  const { adminUsername, accessToken } = useContext(AdminContext);
 
   const [currentFile, setCurrentFile] = useState(undefined)
   const [previewImage, setPreviewImage] = useState(undefined)
@@ -42,6 +43,11 @@ const Admin = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
+
+    console.log("on aaa ala lal :");
+    console.log(adminUsername);
+    console.log(accessToken);
+
     initialize();
     getDefaultCollectionName();
     getSettings();
@@ -123,11 +129,22 @@ const Admin = () => {
     let formData = new FormData();
     formData.append("targetedAlbumName", targetedAlbumName);
 
+    console.log("changeDefaultCollection")
+    console.log(adminUsername)
+    console.log(accessToken)
+
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
+
     return http.post("/updateDefaultAlbum", formData, {
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((error) => {
+    })
+    .then((res) => {
+      setSuccessMessage("Album par défaut modifié !")
+    })
+    .catch((error) => {
       console.log(error);
       setErrorMessage(error.response.data);
     });
@@ -138,6 +155,8 @@ const Admin = () => {
 
     let formData = new FormData();
     formData.append("newAlbumName", newAlbumName);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     // return http.post("/createAlbum", formData, {
     return http.post("/saveAlbum", formData, {
@@ -245,6 +264,9 @@ const Admin = () => {
 
     let formData = new FormData();
 
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
+
     return http.post("/resetUsername", formData, {
       headers: {
         "Content-Type": "application/json",
@@ -276,6 +298,8 @@ const Admin = () => {
     }
 
     formData.append("targetedAlbumName", targetedAlbumName);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     return http.post("/uploadPictures", formData, {
       headers: {
@@ -306,6 +330,8 @@ const Admin = () => {
     let formData = new FormData();
     formData.append("settingName", targetedSettingsName);
     formData.append("newValue", newSettingValue);
+    formData.append("adminUsername", adminUsername);
+    formData.append("accessToken", accessToken);
 
     return http.post("/updateSetting", formData, {
       headers: {

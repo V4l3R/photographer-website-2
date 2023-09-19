@@ -4,41 +4,28 @@ export const AdminContext = createContext();
 
 const AdminProvider = ({ children }) => {
 
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin"));
+  const [adminUsername, setAdminUsername] = useState(localStorage.getItem("adminUsername"));
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
 
-  useEffect(() => {
-    // if (!mobileViewportIsActive) {
-    //   const move = (e) => {
-    //     setCursorPos({
-    //       x: e.clientX,
-    //       y: e.clientY,
-    //     })
-    //   }
-    //   // window.addEventListener('mousemove', move);
-      
-    //   return () => {
-    //     // window.removeEventListener('mousemove', move)
-    //   }
-    // } else {
-    //   // setCursorBG('disappear');
-    // }
-    });
-
-  const cursorVariants = {
-    default: {
-      // x: cursorPos.x - 16,
-      // y: cursorPos.y - 16,
-      // backgroundColor: '#0e1112',
+    function handleSetIsAdmin(value) {
+      setIsAdmin(value)
+      localStorage.setItem("isAdmin", value)
     }
-  }
 
-const mouseEnterHandler = () => {
-  // setCursorBG('text');
-}
+    function handleSetAdminUsername(value) {
+      setAdminUsername(value)
+      localStorage.setItem("adminUsername", value)
+    }
+
+    function handleSetAccessToken(value) {
+      setAccessToken(value)
+      localStorage.setItem("accessToken", value)
+    }
 
 
   return (
-    <AdminContext.Provider value={{ isAdmin, setIsAdmin }}>
+    <AdminContext.Provider value={{ isAdmin, handleSetIsAdmin, adminUsername, handleSetAdminUsername, accessToken, handleSetAccessToken }}>
       {children}
     </AdminContext.Provider>
   );
