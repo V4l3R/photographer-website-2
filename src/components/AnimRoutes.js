@@ -12,23 +12,22 @@ import Admin from '../pages/Admin';
 import UpdatePassword from '../pages/UpdatePassword';
 import UpdateUsername from '../pages/UpdateUsername';
 
-
 const AnimRoutes = () => {
-  const location = useLocation();
-  return (
-    <AnimatePresence initial={true} mode='wait'>
-      <Routes key={location.pathname} location={location}>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/portfolio' element={<Portfolio />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/admin' element={<Admin />} />
-        <Route path='/updatePassword' element={<UpdatePassword />} />
-        <Route path='/updateUsername' element={<UpdateUsername />} />
-      </Routes>
-    </AnimatePresence>
-  );
+ const location = useLocation();
+ return (
+  <AnimatePresence initial={true} mode="wait">
+   <Routes key={location.pathname} location={location}>
+    <Route path="/" element={<Home />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/portfolio" element={<Portfolio />} />
+    <Route path="/contact" element={<Contact />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/admin" element={<Admin />} />
+    <Route path="/updatePassword" element={<UpdatePassword />} />
+    <Route path="/updateUsername" element={<UpdateUsername />} />
+   </Routes>
+  </AnimatePresence>
+ );
 };
 
 export default AnimRoutes;

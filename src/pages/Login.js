@@ -1,22 +1,22 @@
-import React, { useContext, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import validator from "validator";
-import { motion } from "framer-motion";
+import validator from 'validator';
+import { motion } from 'framer-motion';
 
-import { CursorContext } from "../context/CursorContext";
-import { transition1 } from "../transitions";
-import { AdminContext } from "../context/AdminContext";
-import { useEffect } from "react";
+import { CursorContext } from '../context/CursorContext';
+import { transition1 } from '../transitions';
+import { AdminContext } from '../context/AdminContext';
+import { useEffect } from 'react';
 
-import http from "../common/http-common";
-import bcrypt from "bcryptjs";
+import http from '../common/http-common';
+import bcrypt from 'bcryptjs';
 
 const Login = () => {
- const USERNAME = "test@test.com";
- const PASSWORD = "test";
+ const USERNAME = 'test@test.com';
+ const PASSWORD = 'test';
 
- const SALT = "$2a$10$4W7wNGhS/kyiouV/Dqo.vu";
+ const SALT = '$2a$10$4W7wNGhS/kyiouV/Dqo.vu';
 
  const navigate = useNavigate();
 
@@ -26,19 +26,19 @@ const Login = () => {
 
  const [queryParameters] = useSearchParams();
 
- const [errorMessage, setErrorMessage] = useState("");
- const [successMessage, setSuccessMessage] = useState("");
+ const [errorMessage, setErrorMessage] = useState('');
+ const [successMessage, setSuccessMessage] = useState('');
  const [validEmail, setValidEmail] = useState(false);
  const [message, setMessage] = useState(false);
  const [name, setName] = useState(false);
- const [username, setUsername] = useState("");
- const [password, setPassword] = useState("");
+ const [username, setUsername] = useState('');
+ const [password, setPassword] = useState('');
  const [isLostPassword, setIsLostPassword] = useState(false);
 
  useEffect(() => {
   handleSetIsAdmin(false);
-  handleSetAdminUsername("");
-  handleSetAccessToken("");
+  handleSetAdminUsername('');
+  handleSetAccessToken('');
 
   return () => {};
  }, []);
@@ -47,18 +47,18 @@ const Login = () => {
   var email = e.target.value;
 
   if (validator.isEmail(email)) {
-   setErrorMessage("");
+   setErrorMessage('');
    setValidEmail(true);
   } else {
    setErrorMessage("L'identifiant doit être un email");
-   setSuccessMessage("");
+   setSuccessMessage('');
    setValidEmail(false);
   }
  };
 
  function SubmitButton() {
   if (!isLostPassword) {
-   if (validEmail && password !== "") {
+   if (validEmail && password !== '') {
     return (
      <button onClick={connect} className="btn">
       Connexion
@@ -89,17 +89,17 @@ const Login = () => {
  }
 
  function connect() {
-  if (!validEmail || password === "") return;
+  if (!validEmail || password === '') return;
 
   let formData = new FormData();
 
-  formData.append("username", username);
-  formData.append("password", bcrypt.hashSync(password, SALT));
+  formData.append('username', username);
+  formData.append('password', bcrypt.hashSync(password, SALT));
 
   return http
-   .post("/connect", formData, {
+   .post('/connect', formData, {
     headers: {
-     "Content-Type": "application/json",
+     'Content-Type': 'application/json',
     },
    })
    .then((res) => {
@@ -107,14 +107,14 @@ const Login = () => {
     handleSetIsAdmin(true);
     handleSetAdminUsername(username);
     handleSetAccessToken(res.data);
-    setErrorMessage("");
-    setSuccessMessage("Connecté !");
-    navigate("/admin");
+    setErrorMessage('');
+    setSuccessMessage('Connecté !');
+    navigate('/admin');
    })
    .catch((error) => {
     console.log(error);
     setErrorMessage(error.response.data);
-    setSuccessMessage("");
+    setSuccessMessage('');
    });
  }
 
@@ -123,18 +123,18 @@ const Login = () => {
 
   let formData = new FormData();
 
-  formData.append("username", username);
+  formData.append('username', username);
 
   return http
-   .post("/recoverPassword", formData, {
+   .post('/recoverPassword', formData, {
     headers: {
-     "Content-Type": "application/json",
+     'Content-Type': 'application/json',
     },
    })
    .then((res) => {
     console.log(res);
-    setErrorMessage("");
-    setSuccessMessage("Mail envoyé !");
+    setErrorMessage('');
+    setSuccessMessage('Mail envoyé !');
     setIsLostPassword(false);
     // navigate("/login");
    })
@@ -145,15 +145,15 @@ const Login = () => {
  }
 
  function toggleLostPassword() {
-  setUsername("");
-  setPassword("");
-  setErrorMessage("");
+  setUsername('');
+  setPassword('');
+  setErrorMessage('');
   setValidEmail(false);
   setIsLostPassword(!isLostPassword);
  }
 
  function handleEnter(event, func) {
-  if (event.key === "Enter") {
+  if (event.key === 'Enter') {
    func();
   }
  }
@@ -200,9 +200,9 @@ const Login = () => {
          duration: 2.0,
         }}
         style={{
-         fontWeight: "bold",
-         color: "green",
-         textAlign: "center",
+         fontWeight: 'bold',
+         color: 'green',
+         textAlign: 'center',
         }}
         className={`w-full absolute left-0 -mt-6`}
        >
@@ -223,12 +223,12 @@ const Login = () => {
          duration: 2.0,
         }}
         style={{
-         fontWeight: "bold",
-         color: "red",
-         textAlign: "center",
+         fontWeight: 'bold',
+         color: 'red',
+         textAlign: 'center',
         }}
         className={`w-full absolute left-0 ${
-         isLostPassword ? "mt-2" : "-mt-6"
+         isLostPassword ? 'mt-2' : '-mt-6'
         }`}
        >
         {errorMessage}

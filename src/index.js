@@ -9,13 +9,13 @@ import SettingsProvider from './context/SettingsContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <CursorProvider>
-    <AdminProvider>
-      <SettingsProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </SettingsProvider>
-    </AdminProvider>
-  </CursorProvider>
+ <CursorProvider>
+  <AdminProvider>
+   <SettingsProvider>
+    <React.StrictMode>
+     <App />
+    </React.StrictMode>
+   </SettingsProvider>
+  </AdminProvider>
+ </CursorProvider>,
 );
