@@ -62,6 +62,7 @@ const Header = () => {
    <div className="flex flex-col md:flex-row md:items-center pr-0 w-full justify-between">
     {/* Logo */}
     <Link
+     onClick={hideAll}
      onMouseEnter={mouseEnterHandler}
      onMouseLeave={mouseLeaveHandler}
      to={'/'}
