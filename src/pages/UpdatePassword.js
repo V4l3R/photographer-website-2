@@ -95,7 +95,11 @@ const UpdatePassword = () => {
     className="flex bg-[#eef7f9] rounded-full mx-auto w-[90vw] sm:w-[85vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] xxl:w-[50vw] h-[60vh] absolute bottom-0 left-0 right-0 top-[20vh] -z-10"
    />
    <div className="flex items-center justify-center h-[100vh]">
-    <div className="flex flex-col gap-y-4 h-[60vh] w-[50vw] pt-20">
+    <div
+     onMouseEnter={mouseEnterHandler}
+     onMouseLeave={mouseLeaveHandler}
+     className="flex flex-col gap-y-4 h-[60vh] w-[50vw] pt-20"
+    >
      <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

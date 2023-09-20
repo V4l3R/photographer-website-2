@@ -10,11 +10,45 @@ import { Link } from 'react-router-dom';
 import { CursorContext } from '../context/CursorContext';
 import { AdminContext } from '../context/AdminContext.js';
 import { SettingsContext } from '../context/SettingsContext';
+import { useState } from 'react';
 
 const Header = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
 
  const { isAdmin } = useContext(AdminContext);
+
+ const [isAboutActive, setIsAboutActive] = useState(false);
+ const [isPortfolioActive, setIsPortfolioActive] = useState(false);
+ const [isContactActive, setIsContactActive] = useState(false);
+ const [isAdminActive, setIsAdminActive] = useState(false);
+
+ function toggleAboutActive() {
+  setIsAboutActive(true);
+  setIsPortfolioActive(false);
+  setIsContactActive(false);
+  setIsAdminActive(false);
+ }
+
+ function togglePortfolioActive() {
+  setIsPortfolioActive(true);
+  setIsAboutActive(false);
+  setIsContactActive(false);
+  setIsAdminActive(false);
+ }
+
+ function toggleContactActive() {
+  setIsPortfolioActive(false);
+  setIsAboutActive(false);
+  setIsContactActive(true);
+  setIsAdminActive(false);
+ }
+
+ function toggleAdminActive() {
+  setIsPortfolioActive(false);
+  setIsAboutActive(false);
+  setIsContactActive(false);
+  setIsAdminActive(true);
+ }
 
  return (
   <header className="fixed w-full pr-[5vw] md:pr-[50px] xl:pr-[2.5vw] z-30 h-[120px] flex items-center">
@@ -33,26 +67,39 @@ const Header = () => {
     <nav
      onMouseEnter={mouseEnterHandler}
      onMouseLeave={mouseLeaveHandler}
-     className="hidden md:flex gap-x-[6vw] md:gap-x-6 lg:gap-x-8 xl:gap-x-12 font-semibold text-lg mr-[1.5vw] xl:mr-0"
+     className="hidden md:flex h-[35px] mt-3 gap-x-[6vw] md:gap-x-6 lg:gap-x-8 xl:gap-x-12 font-semibold text-lg mr-[1.5vw] xl:mr-0"
     >
      {/* <Link to={'/'} className='text-[#696c6d] hower:text-primary transition'>
           Home
         </Link> */}
      <Link
       to={'/about'}
-      className="text-[#696c6d] hower:text-primary transition"
+      onClick={toggleAboutActive}
+      className={`text-[#696c6d] hover:text-primary transition-border duration-500 effect-underline-base ${
+       isAboutActive ? 'effect-underline-active text-primary font-semibold' : ''
+      }`}
      >
       À propos
      </Link>
      <Link
       to={'/portfolio'}
-      className="text-[#696c6d] hower:text-primary transition"
+      onClick={togglePortfolioActive}
+      className={`text-[#696c6d] hover:text-primary  transition-border duration-500 effect-underline-base ${
+       isPortfolioActive
+        ? 'effect-underline-active text-primary font-semibold'
+        : ''
+      }`}
      >
       Galerie
      </Link>
      <Link
       to={'/contact'}
-      className="text-[#696c6d] hower:text-primary transition"
+      onClick={toggleContactActive}
+      className={`text-[#696c6d] hover:text-primary  transition-border duration-500 effect-underline-base ${
+       isContactActive
+        ? 'effect-underline-active text-primary font-semibold'
+        : ''
+      }`}
      >
       Contact
      </Link>
@@ -60,13 +107,18 @@ const Header = () => {
       <>
        <Link
         to={'/admin'}
-        className="text-[#696c6d] hower:text-primary transition"
+        onClick={toggleAdminActive}
+        className={`text-[#696c6d] hover:text-primary  transition-border duration-500 effect-underline-base ${
+         isAdminActive
+          ? 'effect-underline-active text-primary font-semibold'
+          : ''
+        }`}
        >
         Admin
        </Link>
        <Link
         to={'/login'}
-        className="text-[#696c6d] hower:text-primary transition"
+        className={`text-[#696c6d] hover:text-primary transition`}
        >
         <BiExit className="" size={25} />
        </Link>

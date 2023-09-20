@@ -66,14 +66,15 @@ const Contact = () => {
  }
 
  function MessageSended() {
-  if (isMessageSended) {
+  // if (isMessageSended) {
+  if (true) {
    return (
-    <span
-     style={{ fontWeight: 'bold', color: 'green', textAlign: 'center' }}
-     className="mb-[-10px]"
+    <div
+     style={{ fontWeight: 'bold', color: 'green' }}
+     className="xl:pr-[4rem] pl-[1rem]"
     >
      {sendedMessage}
-    </span>
+    </div>
    );
   }
  }
@@ -131,7 +132,10 @@ const Contact = () => {
        className="lg:flex-1 lg:pt-32 px-4"
       >
        <h1 className="h1">Contact</h1>
-       <p className="mb-4 pl-2">Contactez-moi pour plus de détails</p>
+       <div className="flex justify-between pt-2 lg:pt-0">
+        <p className="mb-4 pl-2">Contactez-moi pour plus de détails</p>
+        <MessageSended />
+       </div>
        {/* <form action="https://formsubmit.co/triforce4@hotmail.com" method="POST" className='flex flex-col gap-y-4'> */}
        <div className="flex flex-col gap-y-4">
         <span
@@ -171,7 +175,6 @@ const Contact = () => {
          onChange={(e) => setMessage(e.target.value)}
         />
         <input type="hidden" name="_captcha" value="false"></input>
-        <MessageSended />
         <SubmitButton />
        </div>
       </div>

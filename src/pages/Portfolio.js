@@ -66,7 +66,7 @@ const Portfolio = () => {
  const [errorMessage, setErrorMessage] = useState('');
 
  useEffect(() => {
-  // dumb();
+  dumb();
 
   getCollections();
   getDefaultCollection();
@@ -84,6 +84,7 @@ const Portfolio = () => {
   const dumbList = ['testtttt', 'tttttttttttest'];
 
   setCollections(dumbList);
+  setCurrentCollection(dumbList[0]);
 
   const dumbObj = {
    albumName: 'testtttt',
@@ -111,6 +112,41 @@ const Portfolio = () => {
   console.log('on a comme collection ');
   console.log(collection);
  }
+
+ // Creer Album
+ useEffect(() => {
+  if (isOpenAlbCreatePopup) document.getElementById('addAlbumInput').focus();
+
+  return () => {};
+ }, [isOpenAlbCreatePopup]);
+
+ // Renommer album
+ useEffect(() => {
+  if (isOpenAlbRenamePopup) document.getElementById('renameAlbumInput').focus();
+
+  return () => {};
+ }, [isOpenAlbRenamePopup]);
+
+ // Ajouter photos
+ useEffect(() => {
+  if (isOpenPicAddPopup) document.getElementById('uploadFile').click();
+
+  return () => {};
+ }, [isOpenPicAddPopup]);
+
+ useEffect(() => {
+  if (currentFile.length > 0) addPictures();
+
+  return () => {};
+ }, [currentFile]);
+
+ // Renommer photos
+ useEffect(() => {
+  if (isOpenPicRenamePopup)
+   document.getElementById('renamePictureInput').focus();
+
+  return () => {};
+ }, [isOpenPicRenamePopup]);
 
  function checkCollection(image) {
   return image.collectionName === currentCollection;
@@ -756,9 +792,9 @@ const Portfolio = () => {
               {/* <input type="text" name="" placeholder='Nouveau nom' id="addAlbumText" onChange={e => setUpdatedAlbumName(e.target.value)} className='w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]' /> */}
               <input
                type="text"
-               name=""
+               name="addAlbumInput"
                placeholder="Nouvel album"
-               id="addAlbumText"
+               id="addAlbumInput"
                onKeyUp={(e) => handleEnter(e, createNewAlbum)}
                onChange={(e) => setNewAlbumName(e.target.value)}
                className="w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]"
@@ -786,7 +822,7 @@ const Portfolio = () => {
                type="text"
                name=""
                placeholder="Nouveau nom"
-               id="addAlbumText"
+               id="renameAlbumInput"
                onKeyUp={(e) => handleEnter(e, renameAlbum)}
                onChange={(e) => setUpdatedAlbumName(e.target.value)}
                className="w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]"
@@ -817,6 +853,7 @@ const Portfolio = () => {
               />
               <div
                onClick={addPictures}
+               id="addPicturesInput"
                className={`${
                 currentFile.length < 1
                  ? 'opacity-50'
@@ -835,9 +872,9 @@ const Portfolio = () => {
              <div className="flex">
               <input
                type="text"
-               name=""
+               name="renamePictureInput"
                placeholder="Nouveau nom"
-               id="addAlbumText"
+               id="renamePictureInput"
                onKeyUp={(e) => handleEnter(e, renamePicture)}
                onChange={(e) => setUpdatedPictureName(e.target.value)}
                className="w-[17vw] outline-none border-b border-b-primary bg-transparent text-center placeholder:text-[#757879]"
@@ -862,6 +899,7 @@ const Portfolio = () => {
               <div>Êtes-vous sûr de vouloir supprimer ces photos ? : </div>
               <div
                onClick={deletePictures}
+               id="deletePicturesInput"
                className={`${
                 listSelectedImg.length < 1
                  ? 'opacity-50'
@@ -880,6 +918,7 @@ const Portfolio = () => {
               <div>Êtes-vous sûr de vouloir supprimer cet album ? : </div>
               <div
                onClick={deleteAlbum}
+               id="deleteAlbumInput"
                className={`${
                 currentCollection === ''
                  ? 'opacity-50'
@@ -897,6 +936,7 @@ const Portfolio = () => {
            <div className="flex">
             <div
              onClick={toggleCreateAlbumPopup}
+             //  onClick={setIsOpenAlbCreatePopup(!isOpenAlbCreatePopup)}
              title="Ajouter un album"
              className={`${
               isOpenAlbCreatePopup ? 'border-b-2 border-black' : ''

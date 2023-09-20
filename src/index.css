@@ -16,6 +16,36 @@
   @apply h-screen w-screen;
  }
  .btn {
-  @apply py-[18px] px-[50px] h-[66px] flex items-center justify-center text-base uppercase font-secondary font-semibold bg-primary text-white;
+  @apply py-[18px] px-[50px] h-[66px] flex items-center justify-center text-base uppercase font-secondary font-semibold border-4 border-black bg-primary text-white transition-all duration-500;
+ }
+ /* .btn:hover {
+  @apply py-[18px] px-[50px] h-[66px] flex items-center justify-center text-base uppercase font-secondary font-semibold border-4 border-black bg-white text-primary;
+ } */
+
+ .effect-underline-base {
+  position: relative;
+  color: #000;
+  text-decoration: none;
+ }
+
+ .effect-underline-active {
+  color: #000;
+ }
+
+ .effect-underline-base::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+ }
+
+ .effect-underline-active::before {
+  transform: scaleX(1);
  }
 }
