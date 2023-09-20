@@ -65,7 +65,7 @@ export function createCollection(collection) {
   image.customOverlay = (
    <div className="h-full flex items-end">
     <div className="whitespace-nowrap overflow-ellipsis overflow-clip">
-     {picName}
+     {decodeURIComponent(picName)}
     </div>
    </div>
   );

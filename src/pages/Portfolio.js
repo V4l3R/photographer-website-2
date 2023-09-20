@@ -31,6 +31,7 @@ import {
  GALLERY_IMAGE_HEIGHT,
  GALLERY_IMAGE_MARGIN,
 } from '../data/constantes';
+
 import { SettingsContext } from '../context/SettingsContext';
 import { AdminContext } from '../context/AdminContext';
 
@@ -186,6 +187,14 @@ const Portfolio = () => {
   }
  }
 
+ function decodeURIArray(array) {
+  console.log('decodeURIArray');
+  console.log(array);
+  let arr = array.map(decodeURIComponent);
+  console.log(arr);
+  return arr;
+ }
+
  function clearPictureName(path) {
   const prefixLength = '/static/media/'.length;
   let answer = path.slice(prefixLength);
@@ -213,7 +222,10 @@ const Portfolio = () => {
   fetch('/getAlbumsList')
    .then((res) => res.json())
    .then((data) => {
-    setCollections(data.albumsName);
+    console.log('on a data : ');
+    console.log(data.albumsName);
+    console.log(decodeURIArray(data.albumsName));
+    setCollections(decodeURIArray(data.albumsName));
     // setCurrentImgList(createCollection(data.collections[0]))
    });
  }
@@ -223,9 +235,12 @@ const Portfolio = () => {
    .then((res) => res.json())
    .then((data) => {
     console.log(data);
-    setCollections(data.albumsName);
-    setCurrentCollection(data.albumsName[0]);
-    changeImgList(data.albumsName[0]);
+    console.log('on a data : ');
+    console.log(data.albumsName);
+    console.log(decodeURIArray(data.albumsName));
+    setCollections(decodeURIArray(data.albumsName));
+    setCurrentCollection(decodeURIComponent(data.albumsName[0]));
+    changeImgList(decodeURIComponent(data.albumsName[0]));
     // setCurrentImgList(createCollection(data.collections[0]))
    });
  }
@@ -235,7 +250,10 @@ const Portfolio = () => {
    .then((res) => res.json())
    .then((data) => {
     console.log(data);
-    setCollections(data.albumsName);
+    console.log('on a data : ');
+    console.log(data.albumsName);
+    console.log(decodeURIArray(data.albumsName));
+    setCollections(decodeURIArray(data.albumsName));
     setCurrentCollection(actualCollection);
     // setCurrentImgList(createCollection(data.collections[0]))
    });
@@ -246,9 +264,12 @@ const Portfolio = () => {
    .then((res) => res.json())
    .then((data) => {
     console.log(data);
-    setCollections(data.albumsName);
-    setCurrentCollection(actualCollection);
-    changeImgList(actualCollection);
+    console.log('on a data : ');
+    console.log(data.albumsName);
+    console.log(decodeURIArray(data.albumsName));
+    setCollections(decodeURIArray(data.albumsName));
+    setCurrentCollection(decodeURIComponent(actualCollection));
+    changeImgList(decodeURIComponent(actualCollection));
     // setCurrentImgList(createCollection(data.collections[0]))
    });
  }
@@ -258,9 +279,12 @@ const Portfolio = () => {
    .then((res) => res.json())
    .then((data) => {
     console.log(data);
-    setCollections(data.albumsName);
-    setCurrentCollection(data.albumsName[0]);
-    changeImgList(data.albumsName[0]);
+    console.log('on a data : ');
+    console.log(data.albumsName);
+    console.log(decodeURIArray(data.albumsName));
+    setCollections(decodeURIArray(data.albumsName));
+    setCurrentCollection(decodeURIComponent(data.albumsName[0]));
+    changeImgList(decodeURIComponent(data.albumsName[0]));
     // setCurrentImgList(createCollection(data.collections[0]))
    });
  }
@@ -278,8 +302,8 @@ const Portfolio = () => {
      getCollectionsAndSetDefaultAlbum();
     } else {
      getCollections();
-     setCurrentCollection(data.defaultAlbumName);
-     changeImgList(data.defaultAlbumName);
+     setCurrentCollection(decodeURIComponent(data.defaultAlbumName));
+     changeImgList(decodeURIComponent(data.defaultAlbumName));
     }
 
     // setCurrentCollection(data.albumsName[0]);
@@ -294,11 +318,12 @@ const Portfolio = () => {
   }
 
   let formData = new FormData();
-  formData.append('newAlbumName', newAlbumName);
+  formData.append('newAlbumName', encodeURIComponent(newAlbumName));
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
+  // formData.append('adminUsername', encodeURIComponent(adminUsername));
+  // formData.append('accessToken', encodeURIComponent(accessToken));
 
-  // return http.post("/createAlbum", formData, {
   return http
    .post('/saveAlbum', formData, {
     headers: {
@@ -306,11 +331,6 @@ const Portfolio = () => {
     },
    })
    .then((res) => {
-    // if(targetedAlbumName === undefined) {
-    //   initialize();
-    // } else {
-    //   getAlbums();
-    // }
     refreshCollectionsAndImgList(newAlbumName);
     closeCreateAlbumPopup();
    })
@@ -324,12 +344,11 @@ const Portfolio = () => {
   let formData = new FormData();
   let newAlbumName = updatedAlbumName;
 
-  formData.append('newAlbumName', newAlbumName);
-  formData.append('targetedAlbumName', currentCollection);
+  formData.append('newAlbumName', encodeURIComponent(newAlbumName));
+  formData.append('targetedAlbumName', encodeURIComponent(currentCollection));
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
 
-  // return http.post("/createAlbum", formData, {
   return http
    .post('/renameAlbum', formData, {
     headers: {
@@ -364,7 +383,7 @@ const Portfolio = () => {
    formData.append('files', file[i]);
   }
 
-  formData.append('targetedAlbumName', currentCollection);
+  formData.append('targetedAlbumName', encodeURIComponent(currentCollection));
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
 
@@ -500,9 +519,9 @@ const Portfolio = () => {
 
   let formData = new FormData();
 
-  formData.append('targetedAlbumName', currentCollection);
+  formData.append('targetedAlbumName', encodeURIComponent(currentCollection));
   formData.append('updatedPicture', listSelectedImg);
-  formData.append('updatedPictureName', updatedPictureName);
+  formData.append('updatedPictureName', encodeURIComponent(updatedPictureName));
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
 
@@ -538,11 +557,10 @@ const Portfolio = () => {
 
   // }
   formData.append('deletedPictures', listSelectedImg);
-  formData.append('targetedAlbumName', currentCollection);
+  formData.append('targetedAlbumName', encodeURIComponent(currentCollection));
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
 
-  // return http.post("/test", formData, {
   return http
    .post('/deleteAlbumPictures', formData, {
     headers: {
@@ -567,11 +585,10 @@ const Portfolio = () => {
  function deleteAlbum() {
   let formData = new FormData();
 
-  formData.append('targetedAlbumName', currentCollection);
+  formData.append('targetedAlbumName', encodeURIComponent(currentCollection));
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
 
-  // return http.post("/test", formData, {
   return http
    .post('/deleteAlbum', formData, {
     headers: {
@@ -596,10 +613,10 @@ const Portfolio = () => {
  function getImgList() {
   let formData = new FormData();
 
-  formData.append('targetedAlbumName', currentCollection);
+  formData.append('targetedAlbumName', encodeURIComponent(currentCollection));
 
   return http
-   .post('/getAlbumPictures', formData, {
+   .post('/acquireAlbumPictures', formData, {
     headers: {
      'Content-Type': 'application/json',
     },
@@ -622,10 +639,10 @@ const Portfolio = () => {
  function changeImgList(collectionName) {
   let formData = new FormData();
 
-  formData.append('targetedAlbumName', collectionName);
+  formData.append('targetedAlbumName', encodeURIComponent(collectionName));
 
   return http
-   .post('/getAlbumPictures', formData, {
+   .post('/acquireAlbumPictures', formData, {
     headers: {
      'Content-Type': 'application/json',
     },
@@ -726,7 +743,7 @@ const Portfolio = () => {
             onChange={(e) => changeCurrentCollection(e)}
            >
             {collections.map((albumName) => (
-             <option>{albumName}</option>
+             <option value={albumName}>{albumName}</option>
             ))}
            </select>
           </div>

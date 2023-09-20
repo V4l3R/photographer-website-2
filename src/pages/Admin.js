@@ -337,9 +337,9 @@ const Admin = () => {
   let formData = new FormData();
   formData.append('settingName', targetedSettingsName);
   if (isPxSetting(targetedSettingsName)) {
-   formData.append('newValue', newSettingValue + 'px');
+   formData.append('newValue', encodeURIComponent(newSettingValue) + 'px');
   } else {
-   formData.append('newValue', newSettingValue);
+   formData.append('newValue', encodeURIComponent(newSettingValue));
   }
   formData.append('adminUsername', adminUsername);
   formData.append('accessToken', accessToken);
@@ -368,22 +368,6 @@ const Admin = () => {
      <div>{successMessage}</div>
      <div>{errorMessage}</div>
      <div className="flex gap-x-8 w-full justify-center">
-      <input
-       type="text"
-       name=""
-       placeholder="Nouvel album"
-       id="addAlbumText"
-       className="w-[17vw] outline-none border-b border-b-primary bg-transparent font-secondary text-center placeholder:text-[#757879]"
-       onChange={(e) => setNewAlbumName(e.target.value)}
-      />
-      <button onClick={createNewAlbum} className="btn w-[17vw]">
-       Ajouter un album
-      </button>
-     </div>
-     <div className="flex gap-x-8 w-full justify-center">
-      <button onClick={openEditAlbumPopup} className="btn w-[17vw]">
-       Modifier un album
-      </button>
       <button onClick={updateUsername} className="btn w-[17vw]">
        Changer d'email
       </button>
@@ -403,7 +387,7 @@ const Admin = () => {
        type="text"
        name=""
        placeholder="Modifier la valeur"
-       value={newSettingValue}
+       value={decodeURIComponent(newSettingValue)}
        id=""
        className="w-[17vw] outline-none border-b border-b-primary bg-transparent font-secondary text-center placeholder:text-[#757879]"
        onChange={(e) => setNewSettingValue(e.target.value)}
@@ -421,24 +405,12 @@ const Admin = () => {
        onChange={(e) => setTargetedAlbumName(e.target.value)}
       >
        {albumsList.map((x) => (
-        <option>{x}</option>
+        <option value={x}>{decodeURIComponent(x)}</option>
        ))}
       </select>
       <button onClick={changeDefaultCollection} className="btn w-[17vw]">
        Envoyer
       </button>
-     </div>
-     {/* <div>
-            {{ errorMessage }}
-          </div> */}
-     <div>
-      <input
-       type="file"
-       accept="image/*"
-       multiple="multiple"
-       onChange={selectFile}
-      />
-      <button onClick={clgFile}>Envoyer</button>
      </div>
 
      {/* ADD ALBUMS */}
