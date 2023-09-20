@@ -16,7 +16,11 @@ const SettingsProvider = ({ children }) => {
  const [youtubeUrl, setYoutubeUrl] = useState('');
 
  useEffect(() => {
-  getSettingsContext();
+  // getSettingsContext();
+
+  setGalleryImageHeight('200px');
+  setGallerySpacing('4px');
+
   // initialize()
   return () => {};
  }, []);

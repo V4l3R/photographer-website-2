@@ -26,10 +26,12 @@
   position: relative;
   color: #000;
   text-decoration: none;
+  transition-property: all;
  }
 
  .effect-underline-active {
   color: #000;
+  font-weight: 600;
  }
 
  .effect-underline-base::before {
@@ -42,10 +44,54 @@
   left: 0;
   background-color: #000;
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
  }
 
  .effect-underline-active::before {
   transform: scaleX(1);
+ }
+
+ /* .select { */
+ /* padding-left: 0.25em; */
+ /* cursor: pointer; */
+ /* background-image: linear-gradient(to top, #6e22226b, #ffffffb6 33%); */
+ /* display: grid; */
+ /* grid-template-areas: 'select'; */
+ /* }  */
+
+ select {
+  /* styling */
+  padding: 0em 0em 0em 0.3em;
+
+  /* reset */
+
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+ }
+
+ select.minimal {
+  background-color: transparent;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-bottom-width: 1px;
+  --tw-border-opacity: 1;
+  border-bottom-color: rgb(72 75 75 / var(--tw-border-opacity));
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+   linear-gradient(135deg, gray 50%, transparent 50%);
+  background-position:
+   calc(100% - 10px) calc(0.55em + 2px),
+   calc(100% - 5px) calc(0.55em + 2px);
+  background-size:
+   5px 5px,
+   5px 5px;
+  background-repeat: no-repeat;
+ }
+
+ select.minimal:focus {
+  outline: 0;
  }
 }

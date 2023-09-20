@@ -50,6 +50,13 @@ const Header = () => {
   setIsAdminActive(true);
  }
 
+ function hideAll() {
+  setIsPortfolioActive(false);
+  setIsAboutActive(false);
+  setIsContactActive(false);
+  setIsAdminActive(false);
+ }
+
  return (
   <header className="fixed w-full pr-[5vw] md:pr-[50px] xl:pr-[2.5vw] z-30 h-[120px] flex items-center">
    <div className="flex flex-col md:flex-row md:items-center pr-0 w-full justify-between">
@@ -75,8 +82,8 @@ const Header = () => {
      <Link
       to={'/about'}
       onClick={toggleAboutActive}
-      className={`text-[#696c6d] hover:text-primary transition-border duration-500 effect-underline-base ${
-       isAboutActive ? 'effect-underline-active text-primary font-semibold' : ''
+      className={`text-[#696c6d] hover:text-primary effect-underline-base ${
+       isAboutActive ? 'effect-underline-active text-primary' : ''
       }`}
      >
       À propos
@@ -84,10 +91,8 @@ const Header = () => {
      <Link
       to={'/portfolio'}
       onClick={togglePortfolioActive}
-      className={`text-[#696c6d] hover:text-primary  transition-border duration-500 effect-underline-base ${
-       isPortfolioActive
-        ? 'effect-underline-active text-primary font-semibold'
-        : ''
+      className={`text-[#696c6d] hover:text-primary effect-underline-base ${
+       isPortfolioActive ? 'effect-underline-active text-primary' : ''
       }`}
      >
       Galerie
@@ -95,10 +100,8 @@ const Header = () => {
      <Link
       to={'/contact'}
       onClick={toggleContactActive}
-      className={`text-[#696c6d] hover:text-primary  transition-border duration-500 effect-underline-base ${
-       isContactActive
-        ? 'effect-underline-active text-primary font-semibold'
-        : ''
+      className={`text-[#696c6d] hover:text-primary effect-underline-base ${
+       isContactActive ? 'effect-underline-active text-primary' : ''
       }`}
      >
       Contact
@@ -108,17 +111,16 @@ const Header = () => {
        <Link
         to={'/admin'}
         onClick={toggleAdminActive}
-        className={`text-[#696c6d] hover:text-primary  transition-border duration-500 effect-underline-base ${
-         isAdminActive
-          ? 'effect-underline-active text-primary font-semibold'
-          : ''
+        className={`text-[#696c6d] hover:text-primary effect-underline-base ${
+         isAdminActive ? 'effect-underline-active text-primary' : ''
         }`}
        >
         Admin
        </Link>
        <Link
         to={'/login'}
-        className={`text-[#696c6d] hover:text-primary transition`}
+        onClick={hideAll}
+        className={`text-[#696c6d] hover:text-primary`}
        >
         <BiExit className="" size={25} />
        </Link>

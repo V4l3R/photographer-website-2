@@ -376,6 +376,7 @@ const Admin = () => {
       <select
        name=""
        id=""
+       className="h-8 w-[17vw] minimal minimal-lg"
        value={targetedSettingsName}
        onChange={(e) => changeCurrentSetting(e.target.value)}
       >
@@ -389,7 +390,7 @@ const Admin = () => {
        placeholder="Modifier la valeur"
        value={decodeURIComponent(newSettingValue)}
        id=""
-       className="w-[17vw] outline-none border-b border-b-primary bg-transparent font-secondary text-center placeholder:text-[#757879]"
+       className="h-8 w-[17vw] outline-none border-b border-b-primary bg-transparent font-secondary text-center placeholder:text-[#757879]"
        onChange={(e) => setNewSettingValue(e.target.value)}
       />
       <button onClick={updateSetting} className="btn w-[17vw]">
@@ -401,6 +402,7 @@ const Admin = () => {
       <select
        name=""
        id=""
+       className="h-8 w-[17vw] minimal minimal-xs"
        value={targetedAlbumName}
        onChange={(e) => setTargetedAlbumName(e.target.value)}
       >
