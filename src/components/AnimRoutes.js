@@ -11,6 +11,7 @@ import { AnimatePresence } from 'framer-motion';
 import Admin from '../pages/Admin';
 import UpdatePassword from '../pages/UpdatePassword';
 import UpdateUsername from '../pages/UpdateUsername';
+import ResetDb from '../pages/ResetDb';
 
 const AnimRoutes = () => {
  const location = useLocation();
@@ -25,6 +26,7 @@ const AnimRoutes = () => {
     <Route path="/admin" element={<Admin />} />
     <Route path="/updatePassword" element={<UpdatePassword />} />
     <Route path="/updateUsername" element={<UpdateUsername />} />
+    <Route path="/resetDb" element={<ResetDb />} />
    </Routes>
   </AnimatePresence>
  );

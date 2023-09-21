@@ -17,8 +17,6 @@ import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { transition1 } from '../transitions';
 import { CursorContext } from '../context/CursorContext';
 
-import GalleryList from '../components/GalleryList';
-
 // import collections from '../data/collections';
 
 // import images, { createCollection, reset } from '../data/images';

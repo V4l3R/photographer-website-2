@@ -295,6 +295,33 @@ const Admin = () => {
    });
  }
 
+ function resetDb() {
+  let formData = new FormData();
+
+  formData.append('adminUsername', adminUsername);
+  formData.append('accessToken', accessToken);
+
+  return http
+   .post('/askResetDb', formData, {
+    headers: {
+     'Content-Type': 'application/json',
+    },
+   })
+   .then((res) => {
+    console.log(res);
+    // setNotAdmin(false);
+    // setIsAdmin(true);
+    // setErrorMessage("");
+    setSuccessMessage('Vérifiez la boite mail du site !');
+    // setIsLostPassword(false);
+    // navigate("/login");
+   })
+   .catch((error) => {
+    console.log(error);
+    setErrorMessage(error.response.data);
+   });
+ }
+
  // function upload(file, onUploadProgress) {
  function upload(file) {
   let targetedEndpoint = '';
@@ -374,6 +401,9 @@ const Admin = () => {
      <div className="flex gap-x-8 w-full justify-center">
       <button onClick={updateUsername} className="btn w-[17vw]">
        Changer d'email
+      </button>
+      <button onClick={resetDb} className="btn w-[17vw]">
+       Reset Db
       </button>
      </div>
      <div className="flex gap-x-8 w-full justify-center">
