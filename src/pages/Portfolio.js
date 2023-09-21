@@ -34,6 +34,7 @@ import {
 
 import { SettingsContext } from '../context/SettingsContext';
 import { AdminContext } from '../context/AdminContext';
+import { FocusContext } from '../context/FocusContext';
 
 const iconSize = 20;
 
@@ -42,6 +43,7 @@ const Portfolio = () => {
   useContext(CursorContext);
  const { galleryImageHeight, gallerySpacing } = useContext(SettingsContext);
  const { isAdmin, adminUsername, accessToken } = useContext(AdminContext);
+ const { togglePortfolioActive } = useContext(FocusContext);
 
  const [currentCollection, setCurrentCollection] = useState('');
  const [imageList, setImageList] = useState([]);
@@ -68,6 +70,7 @@ const Portfolio = () => {
  const [errorMessage, setErrorMessage] = useState('');
 
  useEffect(() => {
+  togglePortfolioActive();
   dumb();
 
   getCollections();
@@ -773,26 +776,8 @@ const Portfolio = () => {
       transition={transition1}
       className="grid grid-cols-12 grid-flow-col gap-y-40 h-[75vh]"
      >
-      <div className="xl:block h-full col-span-2 bg-slate-200 hover:w-[250px] xl:hover:w-auto hover:relative hover:z-50 overflow-y-scroll overflow-x-hidden scrollbar scrollbar-w-2 scrollbar-thumb-gray-900 scrollbar-track-slate-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
-       <motion.div
-        initial={{ opacity: 0, y: '-80%' }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: '-80%' }}
-        transition={transition1}
-        className="h-full col-span-2 text-[#696c6d]"
-       >
-        <div className="flex justify-between">
-         <div>A</div>
-         <div>B</div>
-         <div>C</div>
-        </div>
-        <GalleryList
-         collection={collections}
-         collectionHandler={changeCollection}
-        />
-       </motion.div>
-      </div>
-      <div className="ml-2 h-full col-span-11 xl:col-span-10 overflow-y-scroll scrollbar scrollbar-w-3 scrollbar-thumb-gray-900 scrollbar-track-slate-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full bg-slate-100">
+      <div />
+      <div className="h-full col-span-10 overflow-y-scroll scrollbar scrollbar-w-3 scrollbar-thumb-gray-900 scrollbar-track-slate-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full bg-slate-100">
        <motion.div
         initial={{ opacity: 0, y: '80%' }}
         animate={{ opacity: 1, y: 0 }}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import validator from 'validator';
@@ -11,9 +11,11 @@ import { transition1 } from '../transitions';
 
 // IMAGE //
 import ContactImg from '../img/contact/woman.png';
+import { FocusContext } from '../context/FocusContext';
 
 const Contact = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
+ const { toggleContactActive } = useContext(FocusContext);
  const [queryParameters] = useSearchParams();
 
  const [errorMessage, setErrorMessage] = useState('');
@@ -25,6 +27,12 @@ const Contact = () => {
  const [isMessageSended, setIsMessageSended] = useState(false);
 
  const messageSended = queryParameters.get('success') === 'true' ? true : false;
+
+ useEffect(() => {
+  toggleContactActive();
+
+  return () => {};
+ }, []);
 
  const validateEmail = (e) => {
   var email = e.target.value;

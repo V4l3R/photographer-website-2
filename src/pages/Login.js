@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 
 import http from '../common/http-common';
 import bcrypt from 'bcryptjs';
+import { FocusContext } from '../context/FocusContext';
 
 const Login = () => {
  const USERNAME = 'test@test.com';
@@ -23,6 +24,7 @@ const Login = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
  const { handleSetIsAdmin, handleSetAdminUsername, handleSetAccessToken } =
   useContext(AdminContext);
+ const { hideAll } = useContext(FocusContext);
 
  const [queryParameters] = useSearchParams();
 
@@ -36,6 +38,8 @@ const Login = () => {
  const [isLostPassword, setIsLostPassword] = useState(false);
 
  useEffect(() => {
+  hideAll();
+
   handleSetIsAdmin(false);
   handleSetAdminUsername('');
   handleSetAccessToken('');

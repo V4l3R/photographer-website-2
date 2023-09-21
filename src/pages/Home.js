@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { motion } from 'framer-motion';
@@ -8,9 +8,17 @@ import { transition1 } from '../transitions';
 
 // IMAGE //
 import HomeImg from '../img/home/woman.png';
+import { FocusContext } from '../context/FocusContext';
 
 const Home = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
+ const { hideAll } = useContext(FocusContext);
+
+ useEffect(() => {
+  hideAll();
+
+  return () => {};
+ }, []);
 
  return (
   <motion.section

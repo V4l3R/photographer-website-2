@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { motion } from 'framer-motion';
@@ -9,6 +9,7 @@ import { AdminContext } from '../context/AdminContext';
 
 import http from '../common/http-common';
 import bcrypt from 'bcryptjs';
+import { FocusContext } from '../context/FocusContext';
 
 const UpdatePassword = () => {
  // TODO: Mettre dans constantes ?
@@ -17,6 +18,8 @@ const UpdatePassword = () => {
  const navigate = useNavigate();
 
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
+ const { hideAll } = useContext(FocusContext);
+
  // const { isAdmin, setIsAdmin } = useContext(AdminContext);
 
  const [queryParameters] = useSearchParams();
@@ -27,6 +30,12 @@ const UpdatePassword = () => {
 
  const [newPassword1, setNewPassword1] = useState('');
  const [newPassword2, setNewPassword2] = useState('');
+
+ useEffect(() => {
+  hideAll();
+
+  return () => {};
+ }, []);
 
  const validatePasswords = () => {
   if (newPassword1 === '' || newPassword2 === '') {

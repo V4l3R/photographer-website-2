@@ -13,11 +13,13 @@ import { AdminContext } from '../context/AdminContext';
 import { getJson } from '../data/db';
 import { useEffect } from 'react';
 import { SettingsContext } from '../context/SettingsContext';
+import { FocusContext } from '../context/FocusContext';
 
 const Admin = () => {
  const { getSettingsContext, settings, setSettings } =
   useContext(SettingsContext);
  const { adminUsername, accessToken } = useContext(AdminContext);
+ const { toggleAdminActive } = useContext(FocusContext);
 
  const [currentFile, setCurrentFile] = useState(undefined);
  const [previewImage, setPreviewImage] = useState(undefined);
@@ -44,6 +46,8 @@ const Admin = () => {
  const [successMessage, setSuccessMessage] = useState('');
 
  useEffect(() => {
+  toggleAdminActive();
+
   console.log('on aaa ala lal :');
   console.log(adminUsername);
   console.log(accessToken);

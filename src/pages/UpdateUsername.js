@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { motion } from 'framer-motion';
@@ -11,11 +11,13 @@ import { AdminContext } from '../context/AdminContext';
 
 import http from '../common/http-common';
 import bcrypt from 'bcryptjs';
+import { FocusContext } from '../context/FocusContext';
 
 const UpdateUsername = () => {
  const navigate = useNavigate();
 
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
+ const { hideAll } = useContext(FocusContext);
  // const { isAdmin, setIsAdmin } = useContext(AdminContext);
 
  const [queryParameters] = useSearchParams();
@@ -25,6 +27,12 @@ const UpdateUsername = () => {
  const [isValidEmail, setIsValidEmail] = useState(false);
 
  const [newUsername, setNewUsername] = useState('');
+
+ useEffect(() => {
+  hideAll();
+
+  return () => {};
+ }, []);
 
  const validateEmail = (email) => {
   if (validator.isEmail(email)) {
