@@ -145,6 +145,7 @@ const Login = () => {
    .catch((error) => {
     console.log(error);
     setErrorMessage(error.response.data);
+    setSuccessMessage('');
    });
  }
 

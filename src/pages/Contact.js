@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import validator from 'validator';
 import { motion } from 'framer-motion';
@@ -16,7 +15,6 @@ import { FocusContext } from '../context/FocusContext';
 const Contact = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
  const { toggleContactActive } = useContext(FocusContext);
- const [queryParameters] = useSearchParams();
 
  const [errorMessage, setErrorMessage] = useState('');
  const [sendedMessage, setSendedMessage] = useState('Message envoyé !');
@@ -25,8 +23,6 @@ const Contact = () => {
  const [name, setName] = useState('');
  const [email, setEmail] = useState('');
  const [isMessageSended, setIsMessageSended] = useState(false);
-
- const messageSended = queryParameters.get('success') === 'true' ? true : false;
 
  useEffect(() => {
   toggleContactActive();
@@ -74,8 +70,7 @@ const Contact = () => {
  }
 
  function MessageSended() {
-  // if (isMessageSended) {
-  if (true) {
+  if (isMessageSended) {
    return (
     <div
      style={{ fontWeight: 'bold', color: 'green' }}
@@ -103,14 +98,14 @@ const Contact = () => {
    .then((res) => {
     console.log(res);
     setErrorMessage('');
-    // setSuccessMessage("Connecté !")
     setIsMessageSended(true);
+    // setSuccessMessage("Connecté !")
    })
    .catch((error) => {
     console.log(error);
     setErrorMessage(error.response.data);
-    // setSuccessMessage("");
     setIsMessageSended(false);
+    // setSuccessMessage("");
     // setNotConnectedMessage("Identifiants incorrects");
     // setNotAdmin(true);
    });
@@ -137,11 +132,11 @@ const Contact = () => {
       <div
        onMouseEnter={mouseEnterHandler}
        onMouseLeave={mouseLeaveHandler}
-       className="lg:flex-1 lg:pt-32 px-4"
+       className="lg:flex-1 lg:pt-24 px-4"
       >
        <h1 className="h1">Contact</h1>
        <div className="flex justify-between pt-2 lg:pt-0">
-        <p className="mb-4 pl-2">Contactez-moi pour plus de détails</p>
+        <p className="mb-6 pl-2">Contactez-moi pour plus de détails</p>
         <MessageSended />
        </div>
        {/* <form action="https://formsubmit.co/triforce4@hotmail.com" method="POST" className='flex flex-col gap-y-4'> */}

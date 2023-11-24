@@ -67,32 +67,16 @@ const Admin = () => {
   }
  }
 
- function openAddAlbumPopup() {
-  setAddPopupAnimationScale(1);
- }
-
  function closeAddAlbumPopup() {
   setAddPopupAnimationScale(0);
- }
-
- function openEditAlbumPopup() {
-  setEditPopupAnimationScale(1);
  }
 
  function closeEditAlbumPopup() {
   setEditPopupAnimationScale(0);
  }
 
- function openDeleteAlbumPopup() {
-  setDeletePopupAnimationScale(1);
- }
-
  function closeDeleteAlbumPopup() {
   setDeletePopupAnimationScale(0);
- }
-
- function openSettingsPopup() {
-  setSettingsPopupAnimationScale(1);
  }
 
  function closeSettingsPopup() {
@@ -103,29 +87,6 @@ const Admin = () => {
   return (
    settingName === 'galleryImageHeight' || settingName === 'gallerySpacing'
   );
- }
-
- function getClg() {
-  // fetch("/api")
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data.message));
-  console.log(targetedSettingsName);
- }
-
- function selectFile(event) {
-  console.log('On a : ');
-  console.log(event.target.files);
-  setCurrentFile(event.target.files);
-  setPreviewImage(URL.createObjectURL(event.target.files[0]));
-  setProgress(0);
-  setMessage('');
-
-  setErrorMessage('');
- }
-
- function clgFile() {
-  console.log(currentFile);
-  upload(currentFile);
  }
 
  function getDefaultCollectionName() {
@@ -157,36 +118,12 @@ const Admin = () => {
     },
    })
    .then((res) => {
+    setErrorMessage('');
     setSuccessMessage('Album par défaut modifié !');
    })
    .catch((error) => {
     console.log(error);
-    setErrorMessage(error.response.data);
-   });
- }
-
- function createNewAlbum() {
-  let formData = new FormData();
-  formData.append('newAlbumName', newAlbumName);
-  formData.append('adminUsername', adminUsername);
-  formData.append('accessToken', accessToken);
-
-  // return http.post("/createAlbum", formData, {
-  return http
-   .post('/saveAlbum', formData, {
-    headers: {
-     'Content-Type': 'application/json',
-    },
-   })
-   .then((res) => {
-    if (targetedAlbumName === '') {
-     initialize();
-    } else {
-     getAlbums();
-    }
-   })
-   .catch((error) => {
-    console.log(error);
+    setSuccessMessage('');
     setErrorMessage(error.response.data);
    });
  }
@@ -285,6 +222,7 @@ const Admin = () => {
     // setNotAdmin(false);
     // setIsAdmin(true);
     // setErrorMessage("");
+    setErrorMessage('');
     setSuccessMessage('Vérifiez votre boite mail !');
     // setIsLostPassword(false);
     // navigate("/login");
@@ -292,6 +230,7 @@ const Admin = () => {
    .catch((error) => {
     console.log(error);
     setErrorMessage(error.response.data);
+    setSuccessMessage('');
    });
  }
 
@@ -313,37 +252,14 @@ const Admin = () => {
     // setIsAdmin(true);
     // setErrorMessage("");
     setSuccessMessage('Vérifiez la boite mail du site !');
+    setErrorMessage('');
     // setIsLostPassword(false);
     // navigate("/login");
    })
    .catch((error) => {
     console.log(error);
     setErrorMessage(error.response.data);
-   });
- }
-
- // function upload(file, onUploadProgress) {
- function upload(file) {
-  let targetedEndpoint = '';
-  let formData = new FormData();
-
-  for (let i = 0; i < file.length; i++) {
-   formData.append('files', file[i]);
-  }
-
-  formData.append('targetedAlbumName', targetedAlbumName);
-  formData.append('adminUsername', adminUsername);
-  formData.append('accessToken', accessToken);
-
-  return http
-   .post('/uploadPictures', formData, {
-    headers: {
-     'Content-Type': 'multipart/form-data',
-    },
-   })
-   .catch((error) => {
-    console.log(error);
-    setErrorMessage(error.response.data);
+    setSuccessMessage('');
    });
  }
 
@@ -384,11 +300,13 @@ const Admin = () => {
    .then((res) => {
     console.log(res);
     setSuccessMessage('Paramètre mis à jour');
+    setErrorMessage('');
     refreshSettings(targetedSettingsName);
    })
    .catch((error) => {
     console.log(error);
     setErrorMessage(error.response.data);
+    setSuccessMessage('');
    });
  }
 

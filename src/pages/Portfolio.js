@@ -19,8 +19,8 @@ import { CursorContext } from '../context/CursorContext';
 
 // import collections from '../data/collections';
 
-// import images, { createCollection, reset } from '../data/images';
-import images, { createCollection, reset } from '../data/imagesDumb';
+import images, { createCollection, reset } from '../data/images';
+// import images, { createCollection, reset } from '../data/imagesDumb';
 
 import http from '../common/http-common';
 
@@ -69,7 +69,7 @@ const Portfolio = () => {
 
  useEffect(() => {
   togglePortfolioActive();
-  dumb();
+  // dumb();
 
   getCollections();
   getDefaultCollection();
@@ -180,10 +180,6 @@ const Portfolio = () => {
   return () => {};
  }, [isOpenPicRenamePopup]);
 
- function checkCollection(image) {
-  return image.collectionName === currentCollection;
- }
-
  function filterJsonArraySrc(jsonArray) {
   const resp = [];
   console.log('on passe dans le filter');
@@ -192,24 +188,6 @@ const Portfolio = () => {
   });
   return resp;
  }
-
- function importAll(r) {
-  let images = {};
-  r.keys().map((item, index) => {
-   images[item.replace('./', '')] = r(item);
-  });
-  return images;
- }
-
- const changeCollection = (e) => {
-  setCurrentCollection(e.target.innerText);
-  console.log('on change la collection');
-  console.log(currentCollection);
-  console.log(e.target.innerText);
-
-  // Recharger image list
-  getImgList();
- };
 
  const changeCurrentCollection = (e) => {
   setCurrentCollection(e.target.value);
@@ -261,29 +239,6 @@ const Portfolio = () => {
   let arr = array.map(decodeURIComponent);
   console.log(arr);
   return arr;
- }
-
- function clearPictureName(path) {
-  const prefixLength = '/static/media/'.length;
-  let answer = path.slice(prefixLength);
-  let indexes = [];
-  let array = answer.split('');
-  let element = '.';
-  let idx = array.indexOf(element);
-
-  while (idx !== -1) {
-   indexes.push(idx + 1);
-   idx = array.indexOf(element, idx + 1);
-  }
-
-  return answer
-   .split(
-    answer.substr(
-     indexes[indexes.length - 2],
-     indexes[indexes.length - 1] - indexes[indexes.length - 2],
-    ),
-   )
-   .join('');
  }
 
  function getCollections() {
@@ -734,15 +689,6 @@ const Portfolio = () => {
   if (event.key === 'Enter') {
    func();
   }
- }
-
- function clg() {
-  console.log(imageList);
-  // console.log(importAll(require.context('../../../photographer-website-back/albums/Petits%20chats/', false, /\.(png|jpe?g|svg)$/)));
- }
-
- function clgTest() {
-  console.log('test');
  }
 
  return (

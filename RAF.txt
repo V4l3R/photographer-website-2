@@ -1,0 +1,81 @@
+point noir portfolio
+point noir social
+point noir logo
+icones socials
+espacement burger menu mobile
+espacement logo mobile
+largeur menu burger mobile
+espacement colonne portfolio mobile
+souligne list collection
+main list collection
+Parcours de page
+Page en trop
+centralisation des liens photos
+mise en place de paramètre globaux (collection par defaut, taille des photos dans gallerie...)
+titre portfolio
+menu retractable portfolio vue mobile
+boule noire titre portfolio ?
+titre portfolio bug vue mobile
+marge left titre home qui ne suit pas un mini
+Renommer titre site
+Delai d'attente chargement photo
+
+----------------------------
+Page ajout de galerie / photo
+- changer album par defaut
+- changer url des reseaux
+- changer constantes
+
+param : 
+- changer mail de connexion / reception mail / recup mdp
+- changer mdp
+
+serveur SMTP pour envoi de mail de contact et recupération de mot de passe et changement de mail principal
+Entrée dans login et modifs gallerie n'envoi pas le form
+Envoi mail via backend
+Le message "connecté" disparait mal
+conditionner l'affichage des actions admin
+enlever les px des choix avec px
+lien <a> dans mails
+Point virgule et tralala
+URL Encoded pour param a saisir
+set curseur bon endroit action galerie admin ?
+changer les localhost en constantes
+message envoyé dans page contact pas beau
+Bouton animated, barre bottom sur active link
+Component select fait maison
+suppr vue mobile gallery view
+drop db ? reset db ?
+----------------------------
+
+Message de retour des actions (success/error) page portfolio = recevoir et afficher
+
+Mise en forme de la galerie
+admin page style
+mouseEnter & mouseLeave admin page
+
+probleme is admin page admin
+verifier is admin
+
+Version mobile
+
+TODO....
+Mettre plein de et puis enlever les console.log...
+Renommer fichiers
+Clean
+
+changer photos background
+
+
+---------
+
+Param activer / desactiver réseaux
+
+Page non trouvée
+Plus jolis mails ?
+
+JWT???
+HTTPS?
+
+Animation survol menu galerie?
+Collection qui défile en gros (photo favorite ? ... etc)
